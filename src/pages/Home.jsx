@@ -43,8 +43,8 @@ export default function Home() {
           </Link>
         </div>
         <div className={styles.heroVisual}>
-          <div className={styles.heroImgPlaceholder}>
-            <img src="/heroimagen.png" alt="Colección 2023" />
+          <div className={styles.heroImg}>
+            <img src="/heroimagen.png" alt="Colección 2026" />
           </div>
         </div>
       </section>
