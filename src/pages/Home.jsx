@@ -44,7 +44,7 @@ export default function Home() {
         </div>
         <div className={styles.heroVisual}>
           <div className={styles.heroImgPlaceholder}>
-            <img src="../heroimagen.png" alt="Colección 2023" />
+            <img src="./heroimagen.png" alt="Colección 2023" />
           </div>
         </div>
       </section>

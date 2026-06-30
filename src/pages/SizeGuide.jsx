@@ -44,7 +44,7 @@ export default function SizeGuide() {
   <h2 className={styles.sectionTitle}>¿Cómo tomar las medidas?</h2>
   <p className={styles.sectionSub}>Necesitás una cinta métrica flexible. Tu mascota debe estar parada y relajada.</p>
   <div className={styles.medidasImgWrapper}>
-    <img src="/guia-medidas.jpg" alt="Cómo medir a tu mascota" className={styles.medidasImg} />
+    <img src="./guia-medidas.jpg" alt="Cómo medir a tu mascota" className={styles.medidasImg} />
   </div>
 </section>
 <table className={styles.table}>
