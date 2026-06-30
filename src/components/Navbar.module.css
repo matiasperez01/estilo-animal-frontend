@@ -9,12 +9,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-}
-
-.logoImg {
-  height: 42px;
-  width: auto;
-  display: block;
+  position: relative;
 }
 
 .logo {
@@ -24,21 +19,10 @@
   text-decoration: none;
 }
 
-.logoIcon {
-  font-size: 22px;
-  line-height: 1;
-}
-
-.logoText {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color-text);
-  font-style: normal;
-}
-
-.logoText em {
-  color: var(--color-accent);
-  font-style: normal;
+.logoImg {
+  height: 42px;
+  width: auto;
+  display: block;
 }
 
 .links {
@@ -59,6 +43,12 @@
   color: var(--color-accent);
 }
 
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .cartBtn {
   display: flex;
   align-items: center;
@@ -74,14 +64,9 @@
   transition: opacity var(--transition);
   position: relative;
 }
+.cartBtn:hover { opacity: 0.88; }
 
-.cartBtn:hover {
-  opacity: 0.88;
-}
-
-.cartIcon {
-  font-size: 16px;
-}
+.cartIcon { font-size: 16px; }
 
 .badge {
   background: #fff;
@@ -96,12 +81,61 @@
   justify-content: center;
 }
 
+.menuBtn {
+  display: none;
+  background: none;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.mobileMenu {
+  display: none;
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
-  .nav {
-    padding: 0 16px;
-  }
+  .nav { padding: 0 16px; }
 
   .links { display: none; }
 
-  .cartBtn span:not(.badge) { display: none; }
+  .cartLabel { display: none; }
+
+  .menuBtn { display: flex; }
+
+  .mobileMenu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    padding: 8px;
+    gap: 2px;
+  }
+
+  .mobileMenu a {
+    padding: 12px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: background var(--transition);
+  }
+
+  .mobileMenu a:hover,
+  .mobileMenu a.active {
+    background: var(--color-bg-secondary);
+    color: var(--color-accent);
+  }
 }
