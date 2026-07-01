@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useProductos } from '../hooks/useProductos'
 import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
@@ -13,19 +12,19 @@ function adaptarProducto(p) {
     description: p.descripcion,
     species: p.especie?.toLowerCase() ?? 'perro',
     category: p.categoria?.nombre?.toLowerCase() ?? '',
-    price: Number(p.precio),
+    price: Number(p.precio) || 0,
     sizes: [],
     image: p.imagenUrl ?? null,
-    badge: p.especie === 'gato' ? 'Gato' : 'Perro',
-    stock: p.stock,
+    badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
+    stock: p.stock ?? 0,
     variantes: p.variantes ?? [],
   }
 }
 
 export default function Home() {
   const { toast, showToast } = useToast()
-const { productos: featured } = useProductosDestacados()
-const featuredAdaptados = featured.map(adaptarProducto)
+const { productos: destacados } = useProductosDestacados()
+const featuredAdaptados = destacados.map(adaptarProducto)
   
 
   return (
@@ -57,7 +56,7 @@ const featuredAdaptados = featured.map(adaptarProducto)
           <Link to="/tienda" className={styles.seeAll}>Ver todos →</Link>
         </div>
         <div className={styles.grid}>
-          {featured.map(product => (
+          {featuredAdaptados.map(product => (
             <ProductCard
               key={product.id}
               product={product}
