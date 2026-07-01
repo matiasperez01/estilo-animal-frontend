@@ -23,22 +23,22 @@ function adaptarProducto(p) {
 
 const TESTIMONIOS = [
   {
-    nombre: 'Laura M.',
-    mascota: 'Chihuahua',
+    nombre: 'Zoe N.',
+    mascota: 'Milo',
     estrellas: 5,
-    texto: 'Increíble calidad, mi perrita quedó hermosa con el sweater. La tela es muy suave y el talle fue perfecto siguiendo la guía.',
+    texto: 'Increíble calidad, mi perrito quedó hermoso con el sweater. La tela es muy suave y el talle fue perfecto siguiendo la guía.',
   },
   {
     nombre: 'Martín R.',
-    mascota: 'Bulldog Francés',
+    mascota: 'Teodoro',
     estrellas: 5,
-    texto: 'Muy buena atención y envío rápido. El piloto impermeable le queda perfecto a Pancho, lo usamos en cada paseo lluvioso.',
+    texto: 'Muy buena atención y envío rápido. El piloto impermeable le queda perfecto a Teodoro, lo usamos en cada paseo lluvioso.',
   },
   {
     nombre: 'Sofía G.',
-    mascota: 'Gato Persa',
+    mascota: 'Benjamin',
     estrellas: 5,
-    texto: 'No pensé que iba a encontrar ropa tan linda para gatos. Luna la tolera perfectamente, muy cómoda y de excelente calidad.',
+    texto: 'No pensé que iba a encontrar ropa tan linda para gatos. Benji lo tolera perfectamente, muy cómoda y de excelente calidad.',
   },
 ]
 
@@ -52,7 +52,7 @@ const featuredAdaptados = destacados.map(adaptarProducto)
     <main>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-<p className={styles.heroEyebrow}>El primer petshop online de Río Grande</p>
+<p className={styles.heroEyebrow}>estilo animal rg</p>
 <h1 className={styles.heroTitle}>
   Indumentaria, accesorios<br />y juguetes para tu mascota
 </h1>
@@ -60,8 +60,6 @@ const featuredAdaptados = destacados.map(adaptarProducto)
   Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
 </p>
 <p className={styles.bannerEyebrow}>Río Grande, Tierra del Fuego</p>
-<h2 className={styles.bannerTitle}>El primer petshop online de la ciudad</h2>
-<p className={styles.bannerSub}>Envíos a domicilio y retiro en local. Aceptamos transferencia y efectivo.</p>
           <Link to="/tienda" className={styles.heroCta}>
             Ver catálogo →
           </Link>
