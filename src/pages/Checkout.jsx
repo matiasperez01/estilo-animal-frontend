@@ -59,7 +59,7 @@ export default function Checkout() {
 
   const [form, setForm] = useState({
     nombre: '', apellido: '', telefono: '',
-    barrio: '', direccion: '', ciudad: '',
+    barrio: '', direccion: '',
     pago: 'transferencia',
     nota: '',
     entrega: 'retirar',
@@ -95,7 +95,7 @@ export default function Checkout() {
         apellidoCliente: form.apellido,
         telefono: form.telefono,
         direccion: form.direccion || null,
-        ciudad: form.ciudad || null,
+        ciudad: null,
         tipoEntrega: form.entrega,
         medioPago: form.pago,
         nota: form.nota || null,
@@ -177,7 +177,7 @@ export default function Checkout() {
               <>
                 <label className={styles.field}>
                   <span>Barrio</span>
-                  <select name="barrio" value={form.barrio} onChange={handleChange} required>
+                  <select name="barrio" value={form.barrio} onChange={handleChange} required className={styles.barrioSelect}>
                     <option value="" disabled>Seleccioná tu barrio</option>
                     {ZONAS_ENVIO.map(z => (
                       <option key={z.id} value={z.id}>
@@ -189,10 +189,6 @@ export default function Checkout() {
                 <label className={styles.field}>
                   <span>Dirección</span>
                   <input name="direccion" value={form.direccion} onChange={handleChange} placeholder="Calle y número" />
-                </label>
-                <label className={styles.field}>
-                  <span>Ciudad</span>
-                  <input name="ciudad" value={form.ciudad} onChange={handleChange} placeholder="Ciudad" />
                 </label>
               </>
             )}

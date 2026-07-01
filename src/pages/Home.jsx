@@ -21,6 +21,27 @@ function adaptarProducto(p) {
   }
 }
 
+const TESTIMONIOS = [
+  {
+    nombre: 'Laura M.',
+    mascota: 'Chihuahua',
+    estrellas: 5,
+    texto: 'Increíble calidad, mi perrita quedó hermosa con el sweater. La tela es muy suave y el talle fue perfecto siguiendo la guía.',
+  },
+  {
+    nombre: 'Martín R.',
+    mascota: 'Bulldog Francés',
+    estrellas: 5,
+    texto: 'Muy buena atención y envío rápido. El piloto impermeable le queda perfecto a Pancho, lo usamos en cada paseo lluvioso.',
+  },
+  {
+    nombre: 'Sofía G.',
+    mascota: 'Gato Persa',
+    estrellas: 5,
+    texto: 'No pensé que iba a encontrar ropa tan linda para gatos. Luna la tolera perfectamente, muy cómoda y de excelente calidad.',
+  },
+]
+
 export default function Home() {
   const { toast, showToast } = useToast()
 const { productos: destacados } = useProductosDestacados()
@@ -65,6 +86,38 @@ const featuredAdaptados = destacados.map(adaptarProducto)
           ))}
         </div>
       </section>
+
+      {/* Guía de talles */}
+<section className={styles.sizeGuideSection}>
+  <div className={styles.sizeGuideContent}>
+    <span className={styles.sizeGuideIcon}>📏</span>
+    <div>
+      <h2 className={styles.sizeGuideTitle}>¿No sabés qué talle elegir?</h2>
+      <p className={styles.sizeGuideSub}>Consultá nuestra guía con medidas detalladas y aprendé a medir a tu mascota en simples pasos.</p>
+    </div>
+    <Link to="/guia-de-talles" className={styles.sizeGuideBtn}>
+      Ver guía de talles →
+    </Link>
+  </div>
+</section>
+
+{/* Testimonios */}
+<section className={styles.testimonios}>
+  <h2 className={styles.sectionTitle}>Lo que dicen nuestros clientes</h2>
+  <p className={styles.testimoniosSub}>Mascotas felices, dueños contentos 🐾</p>
+  <div className={styles.testimoniosGrid}>
+    {TESTIMONIOS.map((t, i) => (
+      <div key={i} className={styles.testimonioCard}>
+        <div className={styles.testimonioEstrellas}>{'⭐'.repeat(t.estrellas)}</div>
+        <p className={styles.testimonioTexto}>"{t.texto}"</p>
+        <div className={styles.testimonioAutor}>
+          <span className={styles.testimonioNombre}>{t.nombre}</span>
+          <span className={styles.testimonioPet}>🐶 {t.mascota}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
       <section className={styles.banner}>
         <p className={styles.bannerEyebrow}>Envíos a todo la ciudad</p>
