@@ -16,10 +16,8 @@ function filtrarProductos(productos, filtro) {
     const categoria = p.category ?? ''
 
     if (filtroEspecie.includes(filtro)) {
-      // Filtro por especie: mostrar los de esa especie + los de ambos
       return especie === filtro || especie === 'ambos'
     } else {
-      // Filtro por categoría: coincidencia exacta
       return categoria === filtro
     }
   })
@@ -79,7 +77,6 @@ const filtered = filtrarProductos(adaptados, activeFilter)
 
 function adaptarProducto(p) {
   const cat = p.categoria?.nombre?.toLowerCase() ?? ''
-  console.log(p.nombre, '→ categoria:', cat)
   return {
     id: p.id,
     name: p.nombre,

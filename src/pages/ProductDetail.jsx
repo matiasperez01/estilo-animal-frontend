@@ -78,7 +78,9 @@ export default function ProductDetail() {
         </div>
 
         <div className={styles.infoSection}>
-          <span className={styles.especie}>Para {producto.especie}s</span>
+          <span className={styles.especie}>
+  {producto.especie === 'ambos' ? 'Para perros y gatos' : `Para ${producto.especie}s`}
+</span>
           <h1 className={styles.nombre}>{producto.nombre}</h1>
 
           {producto.descripcion && (

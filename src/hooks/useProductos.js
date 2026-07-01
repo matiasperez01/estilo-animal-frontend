@@ -14,7 +14,6 @@ useEffect(() => {
       return res.json()
     })
     .then(data => {
-      console.log('Productos recibidos del backend:', data)
       setProductos(data)
     })
     .catch(err => setError(err.message))

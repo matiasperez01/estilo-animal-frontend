@@ -29,7 +29,9 @@ export default function ProductCard({ product }) {
 
       <div className={styles.body}>
         <p className={styles.name}>{product.name}</p>
-        <p className={styles.species}>Para {product.species}s</p>
+        <p className={styles.species}>
+  {product.species === 'ambos' ? 'Para perros y gatos' : `Para ${product.species}s`}
+</p>
 
         <div className={styles.footer}>
           <div className={styles.priceBlock}>
