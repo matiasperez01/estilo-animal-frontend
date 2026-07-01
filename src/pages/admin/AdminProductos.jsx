@@ -6,7 +6,7 @@ const API = import.meta.env.VITE_API_URL
 const EMPTY_FORM = {
   nombre: '', descripcion: '', precio: '', stock: '',
   stockMinimo: '', codigoBarra: '', especie: 'perro',
-  categoriaId: '', proveedorId: '', imagenUrl: '',
+  categoriaId: '', proveedorId: '', imagenUrl: '', destacado: false,
 }
 
 export default function AdminProductos() {
@@ -55,6 +55,7 @@ async function abrirEditar(p) {
     categoriaId: p.categoria?.id ?? '',
     proveedorId: p.proveedor?.id ?? '',
     imagenUrl: p.imagenUrl ?? '',
+    destacado: p.destacado ?? false,
   })
   setPreview(p.imagenUrl ?? null)
   setEditando(p.id)
@@ -98,6 +99,7 @@ async function handleImagen(e) {
   async function handleSubmit(e) {
     e.preventDefault()
     setGuardando(true)
+    
 
 const body = {
   nombre: form.nombre,
@@ -110,6 +112,7 @@ const body = {
   imagenUrl: form.imagenUrl || null,
   categoria: form.categoriaId ? { id: Number(form.categoriaId) } : null,
   proveedor: form.proveedorId ? { id: Number(form.proveedorId) } : null,
+  destacado: form.destacado,
 }
 
     const url = editando ? `${API}/api/productos/${editando}` : `${API}/api/productos`
@@ -255,6 +258,15 @@ async function eliminarVariante(varianteId) {
                   <span>Código de barra</span>
                   <input name="codigoBarra" value={form.codigoBarra} onChange={handleChange} />
                 </label>
+                <label className={styles.field} style={{ flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+  <input
+    type="checkbox"
+    name="destacado"
+    checked={form.destacado ?? false}
+    onChange={e => setForm(prev => ({ ...prev, destacado: e.target.checked }))}
+  />
+  <span>Mostrar en destacados de la página principal</span>
+</label>
               </div>
               {editando && (
   <section className={styles.section}>

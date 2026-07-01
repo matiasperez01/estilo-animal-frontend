@@ -4,6 +4,7 @@ import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import styles from './Home.module.css'
+import { useProductosDestacados } from '../hooks/useProductos'
 
 function adaptarProducto(p) {
   return {
@@ -23,8 +24,9 @@ function adaptarProducto(p) {
 
 export default function Home() {
   const { toast, showToast } = useToast()
-  const { productos } = useProductos()
-  const featured = productos.slice(0, 3).map(adaptarProducto)
+const { productos: featured } = useProductosDestacados()
+const featuredAdaptados = featured.map(adaptarProducto)
+  
 
   return (
     <main>

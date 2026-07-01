@@ -35,3 +35,17 @@ export function useProductosBajoStock() {
 
   return { productos, loading }
 }
+
+export function useProductosDestacados() {
+  const [productos, setProductos] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/productos/destacados`)
+      .then(res => res.json())
+      .then(data => setProductos(data))
+      .finally(() => setLoading(false))
+  }, [])
+
+  return { productos, loading }
+}
