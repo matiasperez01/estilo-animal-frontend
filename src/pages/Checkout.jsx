@@ -5,23 +5,40 @@ import styles from './Checkout.module.css'
 
 const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER
 
-function buildWhatsAppMessage(items, subtotal, form) {
-const lineas = items.map(
-  ({ product, size, qty }) =>
-    `• ${product.name}${size ? ` (Talle ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}`
-)
+const ZONAS_ENVIO = [
+  { id: 'intevu',  label: 'Intevu / Centro',                    costo: 0 },
+  { id: 'ch13',    label: 'Ch13 / Ch11 / Aeropuerto',           costo: 2500 },
+  { id: 'vapor',   label: 'Vapor Amadeo',                       costo: 3000 },
+  { id: 'altos',   label: 'Altos de la Estancia / San Martín Norte', costo: 3500 },
+  { id: 'ch2',     label: 'Ch2 / CGT / Ch4',                    costo: 3000 },
+  { id: 'austral', label: 'Barrio Austral',                     costo: 3500 },
+]
+
+function getZona(barrioId) {
+  return ZONAS_ENVIO.find(z => z.id === barrioId) || null
+}
+
+function buildWhatsAppMessage(items, subtotal, costoEnvio, total, form) {
+  const lineas = items.map(
+    ({ product, size, qty }) =>
+      `• ${product.name}${size ? ` (Talle ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}`
+  )
+
+  const zona = form.entrega === 'envio' ? getZona(form.barrio) : null
 
   const entregaTexto = form.entrega === 'retirar'
     ? 'Retiro en el local'
-    : `Envío a domicilio\nDirección: ${form.direccion}, ${form.ciudad}`
+    : `Envío a domicilio\nBarrio: ${zona ? zona.label : ''}\nDirección: ${form.direccion}, ${form.ciudad}`
 
   const mensaje = [
-    '¡Hola! Quiero hacer un pedido:',
+    '¡Hola! Quiero hacer un pedido 🐾',
     '',
     '*Detalle del pedido:*',
     ...lineas,
     '',
-    `*Total:* ${formatPrice(subtotal)}`,
+    `*Subtotal:* ${formatPrice(subtotal)}`,
+    form.entrega === 'envio' ? `*Envío:* ${costoEnvio > 0 ? formatPrice(costoEnvio) : 'Gratis'}` : '',
+    `*Total:* ${formatPrice(total)}`,
     `*Entrega:* ${entregaTexto}`,
     '*Forma de pago:* ' + (form.pago === 'transferencia' ? 'Transferencia bancaria' : 'Efectivo'),
     '',
@@ -42,7 +59,7 @@ export default function Checkout() {
 
   const [form, setForm] = useState({
     nombre: '', apellido: '', telefono: '',
-    direccion: '', ciudad: '',
+    barrio: '', direccion: '', ciudad: '',
     pago: 'transferencia',
     nota: '',
     entrega: 'retirar',
@@ -52,49 +69,60 @@ export default function Checkout() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-async function handleSubmit(e) {
-  e.preventDefault()
-  if (form.entrega === 'envio' && (!form.direccion || !form.ciudad)) {
-    alert('Por favor completá la dirección de entrega.')
-    return
+  function handleEntregaChange(e) {
+    const value = e.target.value
+    setForm(prev => ({ ...prev, entrega: value, barrio: value === 'retirar' ? '' : prev.barrio }))
   }
 
-  // Guardar el pedido en el backend
-  try {
-    const body = {
-      nombreCliente: form.nombre,
-      apellidoCliente: form.apellido,
-      telefono: form.telefono,
-      direccion: form.direccion || null,
-      ciudad: form.ciudad || null,
-      tipoEntrega: form.entrega,
-      medioPago: form.pago,
-      nota: form.nota || null,
-      estado: 'PENDIENTE',
-      total: subtotal,
-      detalles: items.map(({ product, size, qty }) => ({
-        nombreProducto: product.name,
-        talle: size || null,
-        cantidad: qty,
-        precioUnitario: product.price,
-        subtotal: product.price * qty,
-      })),
+  const zonaSeleccionada = form.entrega === 'envio' ? getZona(form.barrio) : null
+  const costoEnvio = zonaSeleccionada ? zonaSeleccionada.costo : 0
+  const total = subtotal + costoEnvio
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (form.entrega === 'envio' && !form.barrio) {
+      alert('Por favor seleccioná tu barrio para calcular el envío.')
+      return
+    }
+    if (form.entrega === 'envio' && (!form.direccion || !form.ciudad)) {
+      alert('Por favor completá la dirección de entrega.')
+      return
     }
 
-    await fetch(`${import.meta.env.VITE_API_URL}/api/ventas`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } catch (err) {
-    console.error('Error al guardar el pedido:', err)
-  }
+    try {
+      const body = {
+        nombreCliente: form.nombre,
+        apellidoCliente: form.apellido,
+        telefono: form.telefono,
+        direccion: form.direccion || null,
+        ciudad: form.ciudad || null,
+        tipoEntrega: form.entrega,
+        medioPago: form.pago,
+        nota: form.nota || null,
+        estado: 'PENDIENTE',
+        total,
+        detalles: items.map(({ product, size, qty }) => ({
+          nombreProducto: product.name,
+          talle: size || null,
+          cantidad: qty,
+          precioUnitario: product.price,
+          subtotal: product.price * qty,
+        })),
+      }
 
-  // Abrir WhatsApp igual
-  const url = buildWhatsAppMessage(items, subtotal, form)
-  window.open(url, '_blank')
-  dispatch({ type: 'CLEAR_CART' })
-}
+      await fetch(`${import.meta.env.VITE_API_URL}/api/ventas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+    } catch (err) {
+      console.error('Error al guardar el pedido:', err)
+    }
+
+    const url = buildWhatsAppMessage(items, subtotal, costoEnvio, total, form)
+    window.open(url, '_blank')
+    dispatch({ type: 'CLEAR_CART' })
+  }
 
   if (items.length === 0) {
     return (
@@ -136,47 +164,28 @@ async function handleSubmit(e) {
             <h2 className={styles.sectionTitle}>Tipo de entrega</h2>
             <div className={styles.paymentOptions}>
               <label className={styles.paymentOption}>
-                <input type="radio" name="entrega" value="retirar" checked={form.entrega === 'retirar'} onChange={handleChange} />
+                <input type="radio" name="entrega" value="retirar" checked={form.entrega === 'retirar'} onChange={handleEntregaChange} />
                 <span>🏪 Retirar en el local</span>
               </label>
               <label className={styles.paymentOption}>
-                <input type="radio" name="entrega" value="envio" checked={form.entrega === 'envio'} onChange={handleChange} />
+                <input type="radio" name="entrega" value="envio" checked={form.entrega === 'envio'} onChange={handleEntregaChange} />
                 <span>🚚 Envío a domicilio</span>
               </label>
             </div>
 
             {form.entrega === 'envio' && (
               <>
-                <div className={styles.shippingInfo}>
-                  <p className={styles.shippingTitle}>📍 Costos de envío por barrio</p>
-                  <div className={styles.shippingGrid}>
-                    <div className={styles.shippingRow}>
-                      <span>Intevu / Centro</span>
-                      <span className={styles.shippingFree}>Gratis</span>
-                    </div>
-                    <div className={styles.shippingRow}>
-                      <span>Ch13 / Ch11 / Aeropuerto</span>
-                      <span>$2.500</span>
-                    </div>
-                    <div className={styles.shippingRow}>
-                      <span>Vapor Amadeo</span>
-                      <span>$3.000</span>
-                    </div>
-                    <div className={styles.shippingRow}>
-                      <span>Altos de la Estancia / San Martín Norte</span>
-                      <span>$3.500</span>
-                    </div>
-                    <div className={styles.shippingRow}>
-                      <span>Ch2 / CGT / Ch4</span>
-                      <span>$3.000</span>
-                    </div>
-                    <div className={styles.shippingRow}>
-                      <span>Barrio Austral</span>
-                      <span>$3.500</span>
-                    </div>
-                  </div>
-                </div>
-
+                <label className={styles.field}>
+                  <span>Barrio</span>
+                  <select name="barrio" value={form.barrio} onChange={handleChange} required>
+                    <option value="" disabled>Seleccioná tu barrio</option>
+                    {ZONAS_ENVIO.map(z => (
+                      <option key={z.id} value={z.id}>
+                        {z.label} — {z.costo > 0 ? formatPrice(z.costo) : 'Gratis'}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <label className={styles.field}>
                   <span>Dirección</span>
                   <input name="direccion" value={form.direccion} onChange={handleChange} placeholder="Calle y número" />
@@ -236,8 +245,8 @@ async function handleSubmit(e) {
                 <div className={styles.summaryInfo}>
                   <p className={styles.summaryName}>{product.name}</p>
                   <p className={styles.summaryMeta}>
-  {size ? `Talle ${size} · ` : ''}x{qty}
-</p>
+                    {size ? `Talle ${size} · ` : ''}x{qty}
+                  </p>
                 </div>
                 <span className={styles.summaryPrice}>{formatPrice(product.price * qty)}</span>
               </div>
@@ -247,8 +256,18 @@ async function handleSubmit(e) {
             <div className={styles.summaryRow}>
               <span>Subtotal</span><span>{formatPrice(subtotal)}</span>
             </div>
+            {form.entrega === 'envio' && (
+              <div className={styles.summaryRow}>
+                <span>Envío</span>
+                <span>
+                  {form.barrio
+                    ? (costoEnvio > 0 ? formatPrice(costoEnvio) : 'Gratis')
+                    : 'Seleccioná tu barrio'}
+                </span>
+              </div>
+            )}
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-              <span>Total</span><span>{formatPrice(subtotal)}</span>
+              <span>Total</span><span>{formatPrice(total)}</span>
             </div>
           </div>
         </aside>
