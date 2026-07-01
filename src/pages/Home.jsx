@@ -52,14 +52,16 @@ const featuredAdaptados = destacados.map(adaptarProducto)
     <main>
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>Nueva colección</p>
-          <h1 className={styles.heroTitle}>
-            Moda pensada para ellos,<br />elegida por vos
-          </h1>
-          <p className={styles.heroSub}>
-            Ropa de calidad para perros y gatos. Diseños únicos que combinan
-            comodidad y estilo en cada talle.
-          </p>
+<p className={styles.heroEyebrow}>El primer petshop online de Río Grande</p>
+<h1 className={styles.heroTitle}>
+  Indumentaria, accesorios<br />y juguetes para tu mascota
+</h1>
+<p className={styles.heroSub}>
+  Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
+</p>
+<p className={styles.bannerEyebrow}>Río Grande, Tierra del Fuego</p>
+<h2 className={styles.bannerTitle}>El primer petshop online de la ciudad</h2>
+<p className={styles.bannerSub}>Envíos a domicilio y retiro en local. Aceptamos transferencia y efectivo.</p>
           <Link to="/tienda" className={styles.heroCta}>
             Ver catálogo →
           </Link>
@@ -120,7 +122,7 @@ const featuredAdaptados = destacados.map(adaptarProducto)
 </section>
 
       <section className={styles.banner}>
-        <p className={styles.bannerEyebrow}>Envíos a todo la ciudad</p>
+        <p className={styles.bannerEyebrow}>Envíos a toda la ciudad</p>
         <h2 className={styles.bannerTitle}>Comprá desde la comodidad de tu casa</h2>
         <p className={styles.bannerSub}>Aceptamos transferencia bancaria y efectivo.</p>
         <Link to="/tienda" className={styles.bannerCta}>Comprar ahora</Link>
