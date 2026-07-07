@@ -135,6 +135,18 @@ const body = {
     cargarDatos()
   }
 
+  async function actualizarVariante(variante) {
+  await fetch(`${API}/api/productos/${editando}/variantes/${variante.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      talle: variante.talle,
+      precio: Number(variante.precio),
+      stock: Number(variante.stock),
+    }),
+  })
+}
+
   async function agregarVariante() {
   if (!varianteForm.talle || !varianteForm.precio || !varianteForm.stock) return
   if (!editando) {
@@ -272,30 +284,50 @@ async function eliminarVariante(varianteId) {
   <section className={styles.section}>
     <h3 className={styles.sectionTitle}>Talles y precios</h3>
 
-    {variantes.length > 0 && (
-      <table className={styles.variantesTable}>
-        <thead>
-          <tr>
-            <th>Talle</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {variantes.map(v => (
-            <tr key={v.id}>
-              <td>{v.talle}</td>
-              <td>${Number(v.precio).toLocaleString('es-AR')}</td>
-              <td>{v.stock}</td>
-              <td>
-                <button className={styles.btnDelete} onClick={() => eliminarVariante(v.id)}>✕</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
+{variantes.length > 0 && (
+  <table className={styles.variantesTable}>
+    <thead>
+      <tr>
+        <th>Talle</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {variantes.map(v => (
+        <tr key={v.id}>
+          <td>{v.talle}</td>
+          <td>
+            <input
+              type="number"
+              value={v.precio}
+              className={styles.varianteInput}
+              onChange={e => setVariantes(prev =>
+                prev.map(x => x.id === v.id ? { ...x, precio: e.target.value } : x)
+              )}
+              onBlur={() => actualizarVariante(v)}
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={v.stock}
+              className={styles.varianteInput}
+              onChange={e => setVariantes(prev =>
+                prev.map(x => x.id === v.id ? { ...x, stock: e.target.value } : x)
+              )}
+              onBlur={() => actualizarVariante(v)}
+            />
+          </td>
+          <td>
+            <button className={styles.btnDelete} onClick={() => eliminarVariante(v.id)}>✕</button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
 
     <div className={styles.row3}>
       <label className={styles.field}>
