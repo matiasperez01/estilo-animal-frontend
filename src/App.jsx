@@ -40,6 +40,15 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/tienda" element={<Catalog />} />
+<a
+                href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}?text=Hola! Quiero consultar sobre sus productos 🐾`}
+  target="_blank"
+  rel="noreferrer"
+  className="whatsapp-float"
+  aria-label="Contactar por WhatsApp"
+>
+  💬
+</a>
               <Route path="/guia-de-talles" element={<SizeGuide />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/nosotros" element={<About />} />
