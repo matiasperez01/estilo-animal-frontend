@@ -14,14 +14,13 @@ import AdminCategorias from './pages/admin/AdminCategorias'
 import AdminPedidos from './pages/admin/AdminPedidos'
 import AdminRoute from './components/AdminRoute'
 import SizeGuide from './pages/SizeGuide'
+
 export default function App() {
   return (
     <CartProvider>
       <Routes>
-        {/* Login admin */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Panel admin protegido */}
         <Route path="/admin" element={
           <AdminRoute>
             <Admin />
@@ -32,7 +31,6 @@ export default function App() {
           <Route path="pedidos" element={<AdminPedidos />} />
         </Route>
 
-        {/* Tienda pública */}
         <Route path="/*" element={
           <>
             <Navbar />
@@ -40,20 +38,20 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/tienda" element={<Catalog />} />
-<a
-                href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}?text=Hola! Quiero consultar sobre sus productos 🐾`}
-  target="_blank"
-  rel="noreferrer"
-  className="whatsapp-float"
-  aria-label="Contactar por WhatsApp"
->
-  💬
-</a>
               <Route path="/guia-de-talles" element={<SizeGuide />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/nosotros" element={<About />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
             </Routes>
+            <a
+              href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}?text=Hola! Quiero consultar sobre sus productos 🐾`}
+              target="_blank"
+              rel="noreferrer"
+              className="whatsapp-float"
+              aria-label="Contactar por WhatsApp"
+            >
+              💬
+            </a>
           </>
         } />
       </Routes>
