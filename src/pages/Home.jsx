@@ -52,31 +52,31 @@ export default function Home() {
   return (
     <main>
 
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <p className={styles.heroEyebrow}>🐾 Petshop online | 📍 Río Grande</p>
-          <h1 className={styles.heroTitle}>
-            Indumentaria, accesorios<br />y juguetes para tu mascota
-          </h1>
-          <p className={styles.heroSub}>
-            Todo lo que tu mascota necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
-          </p>
-          <div className={styles.heroCtas}>
-            <Link to="/tienda" className={styles.heroCta}>Ver productos →</Link>
-            <a
-              href={`https://wa.me/${WA}?text=Hola! Quiero consultar sobre sus productos 🐾`}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.heroCtaSecondary}
-            >
-              💬 Consultar por WhatsApp
-            </a>
-          </div>
-        </div>
-        <div className={styles.heroVisual}>
-          <img src="/heroimagen.png" alt="Estilo Animal" className={styles.heroImg} />
-        </div>
-      </section>
+<section className={styles.hero}>
+  <div className={styles.heroVisual}>
+    <img src="/heroimagen.png" alt="Estilo Animal" className={styles.heroImg} />
+  </div>
+  <div className={styles.heroContent}>
+    <p className={styles.heroEyebrow}>🐾 El primer petshop online de Río Grande</p>
+    <h1 className={styles.heroTitle}>
+      Indumentaria, accesorios<br />y juguetes para tu mascota
+    </h1>
+    <p className={styles.heroSub}>
+      Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
+    </p>
+    <div className={styles.heroCtas}>
+      <Link to="/tienda" className={styles.heroCta}>Ver productos →</Link>
+      <a
+        href={`https://wa.me/${WA}?text=Hola! Quiero consultar sobre sus productos 🐾`}
+        target="_blank"
+        rel="noreferrer"
+        className={styles.heroCtaSecondary}
+      >
+        💬 Consultar por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
 
 
 
@@ -99,7 +99,7 @@ export default function Home() {
     <div className={styles.trustItem}>
       <span className={styles.trustIcon}>🏪</span>
       <div>
-        <p className={styles.trustTitle}>Retiro en local</p>
+        <p className={styles.trustTitle}>Retiro en puerta</p>
         <p className={styles.trustSub}>Sin costo adicional</p>
       </div>
     </div>
