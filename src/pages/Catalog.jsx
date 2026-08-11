@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useProductos } from '../hooks/useProductos'
 import { CATEGORIES } from '../store/products'
 import ProductCard from '../components/ProductCard'
@@ -8,13 +9,10 @@ import styles from './Catalog.module.css'
 
 function filtrarProductos(productos, filtro) {
   if (filtro === 'todos') return productos
-
   const filtroEspecie = ['perro', 'gato']
-
   return productos.filter(p => {
     const especie = p.species ?? ''
     const categoria = p.category ?? ''
-
     if (filtroEspecie.includes(filtro)) {
       return especie === filtro || especie === 'ambos'
     } else {
@@ -23,13 +21,44 @@ function filtrarProductos(productos, filtro) {
   })
 }
 
+function adaptarProducto(p) {
+  return {
+    id: p.id,
+    name: p.nombre,
+    description: p.descripcion,
+    species: p.especie?.toLowerCase() ?? 'perro',
+    category: p.categoria?.nombre?.toLowerCase() ?? '',
+    price: Number(p.precio) || 0,
+    sizes: [],
+    image: p.imagenUrl ?? null,
+    badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
+    stock: p.stock ?? 0,
+    variantes: p.variantes ?? [],
+  }
+}
+
 export default function Catalog() {
-  const [activeFilter, setActiveFilter] = useState('todos')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const categoriaUrl = searchParams.get('categoria') ?? 'todos'
+  const [activeFilter, setActiveFilter] = useState(categoriaUrl)
   const { productos, loading, error } = useProductos()
   const { toast, showToast } = useToast()
 
-const adaptados = productos.map(adaptarProducto)
-const filtered = filtrarProductos(adaptados, activeFilter)
+  useEffect(() => {
+    setActiveFilter(categoriaUrl)
+  }, [categoriaUrl])
+
+  function setFilter(id) {
+    setActiveFilter(id)
+    if (id === 'todos') {
+      setSearchParams({})
+    } else {
+      setSearchParams({ categoria: id })
+    }
+  }
+
+  const adaptados = productos.map(adaptarProducto)
+  const filtered = filtrarProductos(adaptados, activeFilter)
 
   return (
     <main className={styles.page}>
@@ -44,7 +73,7 @@ const filtered = filtrarProductos(adaptados, activeFilter)
           <button
             key={cat.id}
             className={`${styles.chip} ${activeFilter === cat.id ? styles.chipActive : ''}`}
-            onClick={() => setActiveFilter(cat.id)}
+            onClick={() => setFilter(cat.id)}
           >
             {cat.label}
           </button>
@@ -53,18 +82,18 @@ const filtered = filtrarProductos(adaptados, activeFilter)
 
       <div className={styles.catalogArea}>
         {loading && <p className={styles.estado}>Cargando productos...</p>}
-        {error && <p className={styles.estadoError}>No se pudo conectar con el servidor. Verificá que el backend esté corriendo.</p>}
+        {error && <p className={styles.estadoError}>No se pudo conectar con el servidor.</p>}
         {!loading && !error && (
           <>
             <p className={styles.count}>{filtered.length} productos</p>
             <div className={styles.grid}>
-{filtered.map(producto => (
-  <ProductCard
-    key={producto.id}
-    product={producto}
-    onAdded={(name) => showToast(`${name} agregado al carrito`)}
-  />
-))}
+              {filtered.map(producto => (
+                <ProductCard
+                  key={producto.id}
+                  product={producto}
+                  onAdded={(name) => showToast(`${name} agregado al carrito`)}
+                />
+              ))}
             </div>
           </>
         )}
@@ -73,21 +102,4 @@ const filtered = filtrarProductos(adaptados, activeFilter)
       <Toast message={toast} />
     </main>
   )
-}
-
-function adaptarProducto(p) {
-  const cat = p.categoria?.nombre?.toLowerCase() ?? ''
-  return {
-    id: p.id,
-    name: p.nombre,
-    description: p.descripcion,
-    species: p.especie?.toLowerCase() ?? 'perro',
-    category: cat,
-    price: Number(p.precio),
-    sizes: [],
-    image: p.imagenUrl ?? null,
-    badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
-    stock: p.stock,
-    variantes: p.variantes ?? [],
-  }
 }

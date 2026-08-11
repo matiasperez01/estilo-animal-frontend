@@ -14,7 +14,7 @@ import AdminCategorias from './pages/admin/AdminCategorias'
 import AdminPedidos from './pages/admin/AdminPedidos'
 import AdminRoute from './components/AdminRoute'
 import SizeGuide from './pages/SizeGuide'
-
+import Footer from './components/Footer'
 export default function App() {
   return (
     <CartProvider>
@@ -52,6 +52,7 @@ export default function App() {
             >
               💬
             </a>
+            <Footer />
           </>
         } />
       </Routes>

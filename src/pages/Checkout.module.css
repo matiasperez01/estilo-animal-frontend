@@ -316,3 +316,39 @@
 .barrioSelect:focus {
   border-color: var(--color-accent);
 }
+
+.freeShipBar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.freeShipText {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.freeShipText strong { color: var(--color-text); }
+
+.freeShipTrack {
+  height: 5px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.freeShipFill {
+  height: 100%;
+  background: #2E6B2E;
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.freeShipReached {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2E6B2E;
+  text-align: center;
+  padding: 8px 0;
+}

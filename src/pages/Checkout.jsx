@@ -75,7 +75,10 @@ export default function Checkout() {
   }
 
   const zonaSeleccionada = form.entrega === 'envio' ? getZona(form.barrio) : null
-  const costoEnvio = zonaSeleccionada ? zonaSeleccionada.costo : 0
+const ENVIO_GRATIS_DESDE = 30000
+const costoEnvioBase = zonaSeleccionada ? zonaSeleccionada.costo : 0
+const costoEnvio = subtotal >= ENVIO_GRATIS_DESDE ? 0 : costoEnvioBase
+const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
   const total = subtotal + costoEnvio
 
   async function handleSubmit(e) {
@@ -248,20 +251,43 @@ export default function Checkout() {
               </div>
             ))}
           </div>
+          {(() => {
+  const LIMITE = 30000
+  const falta = LIMITE - subtotal
+  const progreso = Math.min((subtotal / LIMITE) * 100, 100)
+  return form.entrega === 'envio' && (
+    subtotal < LIMITE ? (
+      <div className={styles.freeShipBar}>
+        <p className={styles.freeShipText}>
+          Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis 🚚
+        </p>
+        <div className={styles.freeShipTrack}>
+          <div className={styles.freeShipFill} style={{ width: `${progreso}%` }} />
+        </div>
+      </div>
+    ) : (
+      <div className={styles.freeShipReached}>
+        🎉 ¡Conseguiste envío gratis!
+      </div>
+    )
+  )
+})()}
           <div className={styles.summaryTotals}>
             <div className={styles.summaryRow}>
               <span>Subtotal</span><span>{formatPrice(subtotal)}</span>
             </div>
-            {form.entrega === 'envio' && (
-              <div className={styles.summaryRow}>
-                <span>Envío</span>
-                <span>
-                  {form.barrio
-                    ? (costoEnvio > 0 ? formatPrice(costoEnvio) : 'Gratis')
-                    : 'Seleccioná tu barrio'}
-                </span>
-              </div>
-            )}
+{form.entrega === 'envio' && (
+  <div className={styles.summaryRow}>
+    <span>Envío</span>
+    <span style={{ color: envioGratis ? '#2E6B2E' : 'inherit', fontWeight: envioGratis ? 600 : 400 }}>
+      {envioGratis
+        ? '🎉 Gratis'
+        : form.barrio
+          ? (costoEnvioBase > 0 ? formatPrice(costoEnvioBase) : 'Gratis')
+          : 'Seleccioná tu barrio'}
+    </span>
+  </div>
+)}
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
               <span>Total</span><span>{formatPrice(total)}</span>
             </div>

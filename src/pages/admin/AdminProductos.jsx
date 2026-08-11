@@ -21,9 +21,10 @@ export default function AdminProductos() {
   const [preview, setPreview] = useState(null)
   const [variantes, setVariantes] = useState([])
   const [varianteForm, setVarianteForm] = useState({ talle: '', precio: '', stock: '' })
+  const [imagenes, setImagenes] = useState([])
 
   useEffect(() => {
-    cargarDatos()
+    cargarDatos() 
   }, [])
 
   async function cargarDatos() {
@@ -59,11 +60,9 @@ async function abrirEditar(p) {
   })
   setPreview(p.imagenUrl ?? null)
   setEditando(p.id)
-
-  // Cargar variantes existentes
+  setImagenes(p.imagenes ?? [])
   const v = await fetch(`${API}/api/productos/${p.id}/variantes`).then(r => r.json())
   setVariantes(v)
-
   setShowForm(true)
 }
 
@@ -74,6 +73,7 @@ function cerrarForm() {
   setPreview(null)
   setVariantes([])
   setVarianteForm({ talle: '', precio: '', stock: '' })
+  setImagenes([])
 }
 
   function handleChange(e) {
@@ -86,14 +86,33 @@ async function handleImagen(e) {
   setSubiendo(true)
   const formData = new FormData()
   formData.append('archivo', archivo)
-  const res = await fetch(`${API}/api/imagenes/subir`, {
-    method: 'POST',
-    body: formData,
-  })
-  const data = await res.json()
-  setForm(prev => ({ ...prev, imagenUrl: data.url }))
-  setPreview(data.url)
+
+  if (editando) {
+    const res = await fetch(`${API}/api/imagenes/subir/${editando}`, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await res.json()
+    setImagenes(prev => [...prev, { id: data.id, url: data.url, orden: data.orden }])
+    if (imagenes.length === 0) {
+      setForm(prev => ({ ...prev, imagenUrl: data.url }))
+      setPreview(data.url)
+    }
+  } else {
+    const res = await fetch(`${API}/api/imagenes/subir`, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await res.json()
+    setForm(prev => ({ ...prev, imagenUrl: data.url }))
+    setPreview(data.url)
+  }
   setSubiendo(false)
+}
+
+async function eliminarImagen(imagenId) {
+  await fetch(`${API}/api/imagenes/imagen/${imagenId}`, { method: 'DELETE' })
+  setImagenes(prev => prev.filter(i => i.id !== imagenId))
 }
 
   async function handleSubmit(e) {
@@ -362,8 +381,8 @@ async function eliminarVariante(varianteId) {
     </button>
   </section>
 )}
-              <label className={styles.field}>
-  <span>Imagen del producto</span>
+<label className={styles.field}>
+  <span>Imágenes del producto</span>
   <input
     type="file"
     accept="image/*"
@@ -371,12 +390,34 @@ async function eliminarVariante(varianteId) {
     className={styles.fileInput}
   />
   {subiendo && <p className={styles.uploadingText}>Subiendo imagen...</p>}
-  {preview && (
-    <div className={styles.imagePreview}>
-      <img src={preview} alt="Preview" />
-    </div>
-  )}
 </label>
+
+{imagenes.length > 0 && (
+  <div className={styles.imagenesGrid}>
+    {imagenes.map((img, i) => (
+      <div key={img.id ?? i} className={styles.imagenThumb}>
+        <img src={img.url} alt={`Foto ${i + 1}`} />
+        {img.id && (
+          <button
+            type="button"
+            className={styles.imagenRemove}
+            onClick={() => eliminarImagen(img.id)}
+            aria-label="Eliminar imagen"
+          >
+            ✕
+          </button>
+        )}
+        {i === 0 && <span className={styles.imagenPrincipal}>Principal</span>}
+      </div>
+    ))}
+  </div>
+)}
+
+{!editando && preview && (
+  <div className={styles.imagePreview}>
+    <img src={preview} alt="Preview" />
+  </div>
+)}
               <div className={styles.formFooter}>
                 <button type="button" className={styles.btnSecondary} onClick={cerrarForm}>Cancelar</button>
                 <button type="submit" className={styles.btnPrimary} disabled={guardando}>

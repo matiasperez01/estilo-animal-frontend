@@ -5,6 +5,7 @@
 }
 
 :root {
+  --font-display: 'Fredoka', sans-serif;
   --color-accent:        #B8860B;
   --color-accent-light:  #F5EDD0;
   --color-accent-dark:   #8B6508;
@@ -96,4 +97,12 @@ img {
 .whatsapp-float:hover {
   transform: scale(1.08);
   box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+}
+
+.heroTitle, .sectionTitle, .bannerTitle {
+  font-family: var(--font-display);
 }

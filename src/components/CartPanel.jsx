@@ -66,6 +66,26 @@ const navigate = useNavigate()
               <span className={styles.label}>Subtotal</span>
               <span className={styles.value}>{formatPrice(subtotal)}</span>
             </div>
+            {/* Barra de progreso envío gratis */}
+{(() => {
+  const LIMITE = 30000
+  const falta = LIMITE - subtotal
+  const progreso = Math.min((subtotal / LIMITE) * 100, 100)
+  return subtotal < LIMITE ? (
+    <div className={styles.freeShipBar}>
+      <p className={styles.freeShipText}>
+        Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis 🚚
+      </p>
+      <div className={styles.freeShipTrack}>
+        <div className={styles.freeShipFill} style={{ width: `${progreso}%` }} />
+      </div>
+    </div>
+  ) : (
+    <div className={styles.freeShipReached}>
+      🎉 ¡Conseguiste envío gratis!
+    </div>
+  )
+})()}
             <div className={styles.row}>
               <span className={styles.label}>Envío</span>
               <span className={styles.value}>A calcular</span>
