@@ -57,7 +57,7 @@ export default function Home() {
     <img src="/heroimagen.png" alt="Estilo Animal" className={styles.heroImg} />
   </div>
   <div className={styles.heroContent}>
-    <p className={styles.heroEyebrow}>🐾 El primer petshop online de Río Grande</p>
+    <p className={styles.heroEyebrow}>🐾 Petshop Online 📍 Río Grande, TDF</p>
     <h1 className={styles.heroTitle}>
       Indumentaria, accesorios<br />y juguetes para tu mascota
     </h1>

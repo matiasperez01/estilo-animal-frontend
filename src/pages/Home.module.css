@@ -435,6 +435,29 @@
 .bannerCtaSecondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
 @media (max-width: 768px) {
+
+  .trustGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .trustItem {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px;
+  }
+
+  .trustItem:nth-child(odd) {
+    border-right: 1px solid var(--color-border);
+  }
+
+  .trustItem:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .trustTitle { font-size: 12px; }
+  .trustSub { font-size: 11px; }
+  .trustIcon { font-size: 20px; }
+
   .hero {
     grid-template-columns: 1fr;
     padding: 0;
