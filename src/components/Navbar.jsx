@@ -38,6 +38,9 @@ export default function Navbar() {
         </div>
 
         <NavLink to="/guia-de-talles" className={({ isActive }) => isActive ? styles.active : ''}>Guía de talles</NavLink>
+        <NavLink to="/como-comprar" className={({ isActive }) => isActive ? styles.active : ''}>
+  Cómo comprar
+</NavLink>
         <NavLink to="/nosotros" className={({ isActive }) => isActive ? styles.active : ''}>Sobre nosotros</NavLink>
       </div>
 
@@ -85,7 +88,7 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
+<NavLink to="/como-comprar" onClick={closeAll}>Cómo comprar</NavLink>
           <NavLink to="/guia-de-talles" onClick={closeAll}>Guía de talles</NavLink>
           <NavLink to="/nosotros" onClick={closeAll}>Sobre nosotros</NavLink>
         </div>
