@@ -61,6 +61,7 @@
 .heroCtaSecondary {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   padding: 13px 20px;
   background: transparent;
   color: var(--color-text);
@@ -255,24 +256,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 20px 16px;
+  gap: 8px;
+  padding: 18px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-bg);
   text-decoration: none;
-  color: var(--color-text);
-  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
   font-weight: 500;
   transition: all var(--transition);
+  filter: grayscale(1);
+  opacity: 0.75;
 }
+
 .catCard:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
+  filter: grayscale(0);
+  opacity: 1;
   background: var(--color-accent-light);
 }
 
-.catIcon { font-size: 28px; }
+.catIcon {
+  font-size: 24px;
+  line-height: 1;
+}
 
 /* GUÍA DE TALLES */
 .sizeGuideSection {
@@ -426,7 +435,9 @@
 .bannerCta:hover { opacity: 0.88; }
 
 .bannerCtaSecondary {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 12px 24px;
   background: transparent;
   color: var(--color-text);
@@ -439,29 +450,38 @@
 }
 .bannerCtaSecondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
+.trustStrip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 24px;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.trustDivider {
+  color: var(--color-border-medium);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .trustStrip {
+    gap: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+
+  .trustDivider { display: none; }
+}
+
+
 @media (max-width: 768px) {
 
-  .trustGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .trustItem {
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    padding: 16px;
-  }
-
-  .trustItem:nth-child(odd) {
-    border-right: 1px solid var(--color-border);
-  }
-
-  .trustItem:nth-last-child(-n+2) {
-    border-bottom: none;
-  }
-
-  .trustTitle { font-size: 12px; }
-  .trustSub { font-size: 11px; }
-  .trustIcon { font-size: 20px; }
 
   .hero {
     grid-template-columns: 1fr;
