@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { adminFetch } from '../../lib/adminAuth'
 import styles from './AdminTable.module.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -30,8 +31,8 @@ export default function AdminProductos() {
   async function cargarDatos() {
     setLoading(true)
     const [p, c] = await Promise.all([
-      fetch(`${API}/api/productos`).then(r => r.json()),
-      fetch(`${API}/api/categorias`).then(r => r.json()),
+      adminFetch(`${API}/api/productos`).then(r => r.json()),
+      adminFetch(`${API}/api/categorias`).then(r => r.json()),
     ])
     setProductos(p)
     setCategorias(c)
@@ -61,7 +62,7 @@ async function abrirEditar(p) {
   setPreview(p.imagenUrl ?? null)
   setEditando(p.id)
   setImagenes(p.imagenes ?? [])
-  const v = await fetch(`${API}/api/productos/${p.id}/variantes`).then(r => r.json())
+  const v = await adminFetch(`${API}/api/productos/${p.id}/variantes`).then(r => r.json())
   setVariantes(v)
   setShowForm(true)
 }
@@ -88,7 +89,7 @@ async function handleImagen(e) {
   formData.append('archivo', archivo)
 
   if (editando) {
-    const res = await fetch(`${API}/api/imagenes/subir/${editando}`, {
+    const res = await adminFetch(`${API}/api/imagenes/subir/${editando}`, {
       method: 'POST',
       body: formData,
     })
@@ -99,7 +100,7 @@ async function handleImagen(e) {
       setPreview(data.url)
     }
   } else {
-    const res = await fetch(`${API}/api/imagenes/subir`, {
+    const res = await adminFetch(`${API}/api/imagenes/subir`, {
       method: 'POST',
       body: formData,
     })
@@ -111,7 +112,7 @@ async function handleImagen(e) {
 }
 
 async function eliminarImagen(imagenId) {
-  await fetch(`${API}/api/imagenes/imagen/${imagenId}`, { method: 'DELETE' })
+  await adminFetch(`${API}/api/imagenes/imagen/${imagenId}`, { method: 'DELETE' })
   setImagenes(prev => prev.filter(i => i.id !== imagenId))
 }
 
@@ -137,7 +138,7 @@ const body = {
     const url = editando ? `${API}/api/productos/${editando}` : `${API}/api/productos`
     const method = editando ? 'PUT' : 'POST'
 
-    await fetch(url, {
+    await adminFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -150,12 +151,12 @@ const body = {
 
   async function eliminar(id) {
     if (!confirm('¿Eliminás este producto?')) return
-    await fetch(`${API}/api/productos/${id}`, { method: 'DELETE' })
+    await adminFetch(`${API}/api/productos/${id}`, { method: 'DELETE' })
     cargarDatos()
   }
 
   async function actualizarVariante(variante) {
-  await fetch(`${API}/api/productos/${editando}/variantes/${variante.id}`, {
+  await adminFetch(`${API}/api/productos/${editando}/variantes/${variante.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -173,7 +174,7 @@ const body = {
     alert('Guardá el producto primero, luego agregá los talles.')
     return
   }
-  await fetch(`${API}/api/productos/${editando}/variantes`, {
+  await adminFetch(`${API}/api/productos/${editando}/variantes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -182,13 +183,13 @@ const body = {
       stock: Number(varianteForm.stock),
     }),
   })
-  const v = await fetch(`${API}/api/productos/${editando}/variantes`).then(r => r.json())
+  const v = await adminFetch(`${API}/api/productos/${editando}/variantes`).then(r => r.json())
   setVariantes(v)
   setVarianteForm({ talle: '', precio: '', stock: '' })
 }
 
 async function eliminarVariante(varianteId) {
-  await fetch(`${API}/api/productos/${editando}/variantes/${varianteId}`, { method: 'DELETE' })
+  await adminFetch(`${API}/api/productos/${editando}/variantes/${varianteId}`, { method: 'DELETE' })
   setVariantes(prev => prev.filter(v => v.id !== varianteId))
 }
 

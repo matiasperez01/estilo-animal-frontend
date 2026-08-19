@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { adminFetch } from '../../lib/adminAuth'
 import styles from './AdminTable.module.css'
 import pStyles from './AdminPedidos.module.css'
 
@@ -32,13 +33,13 @@ export default function AdminPedidos() {
 
   async function cargar() {
     setLoading(true)
-    const data = await fetch(`${API}/api/ventas`).then(r => r.json())
+    const data = await adminFetch(`${API}/api/ventas`).then(r => r.json())
     setPedidos(data)
     setLoading(false)
   }
 
   async function cambiarEstado(id, estado) {
-    await fetch(`${API}/api/ventas/${id}/estado`, {
+    await adminFetch(`${API}/api/ventas/${id}/estado`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ estado }),
@@ -48,7 +49,7 @@ export default function AdminPedidos() {
 
   async function eliminar(id) {
     if (!confirm('¿Eliminás este pedido?')) return
-    await fetch(`${API}/api/ventas/${id}`, { method: 'DELETE' })
+    await adminFetch(`${API}/api/ventas/${id}`, { method: 'DELETE' })
     cargar()
   }
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { adminFetch } from '../../lib/adminAuth'
 import styles from './AdminTable.module.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -15,7 +16,7 @@ export default function AdminCategorias() {
 
   async function cargar() {
     setLoading(true)
-    const data = await fetch(`${API}/api/categorias`).then(r => r.json())
+    const data = await adminFetch(`${API}/api/categorias`).then(r => r.json())
     setCategorias(data)
     setLoading(false)
   }
@@ -42,7 +43,7 @@ export default function AdminCategorias() {
     setGuardando(true)
     const url = editando ? `${API}/api/categorias/${editando}` : `${API}/api/categorias`
     const method = editando ? 'PUT' : 'POST'
-    await fetch(url, {
+    await adminFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
@@ -54,7 +55,7 @@ export default function AdminCategorias() {
 
   async function eliminar(id) {
     if (!confirm('¿Eliminás esta categoría?')) return
-    await fetch(`${API}/api/categorias/${id}`, { method: 'DELETE' })
+    await adminFetch(`${API}/api/categorias/${id}`, { method: 'DELETE' })
     cargar()
   }
 

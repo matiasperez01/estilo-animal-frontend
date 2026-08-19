@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
+import { isAuthenticated } from '../lib/adminAuth'
 
 export default function AdminRoute({ children }) {
-  const isAuth = sessionStorage.getItem('adminAuth') === 'true'
-  return isAuth ? children : <Navigate to="/admin/login" replace />
+  return isAuthenticated() ? children : <Navigate to="/admin/login" replace />
 }

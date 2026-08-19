@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { clearToken } from '../../lib/adminAuth'
 import styles from './Admin.module.css'
 
 export default function Admin() {
@@ -20,7 +21,7 @@ export default function Admin() {
         <a href="/" className={styles.backLink}>← Volver a la tienda</a>
 <button
   className={styles.logoutBtn}
-  onClick={() => { sessionStorage.removeItem('adminAuth'); window.location.href = '/admin/login' }}
+  onClick={() => { clearToken(); window.location.href = '/admin/login' }}
 >
   Cerrar sesión
 </button>
