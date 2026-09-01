@@ -87,7 +87,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
       alert('Por favor seleccioná tu barrio para calcular el envío.')
       return
     }
-    if (form.entrega === 'envio' && (!form.direccion || !form.ciudad)) {
+    if (form.entrega === 'envio' && !form.direccion) {
       alert('Por favor completá la dirección de entrega.')
       return
     }
