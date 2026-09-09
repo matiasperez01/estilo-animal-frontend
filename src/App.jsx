@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { CartProvider } from './store/CartContext'
+import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import CartPanel from './components/CartPanel'
 import Home from './pages/Home'
@@ -21,6 +22,7 @@ import { IconWhatsApp } from './components/icons/Icon'
 export default function App() {
   return (
     <CartProvider>
+      <ScrollToTop />
       <Routes>
         <Route path="/admin/login" element={<AdminLogin />} />
 
