@@ -64,6 +64,45 @@
   color: #fff;
 }
 
+/* SUBFILTROS (categoría) */
+.subfilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 40px 0;
+}
+
+.subfilterBtn {
+  padding: 8px 18px;
+  border: 1.5px solid var(--color-border-medium);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-sans);
+}
+
+.subfilterBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.subfilterBtnActive {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.subfilterBtnActive:hover {
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+  color: #fff;
+}
+
 /* CATÁLOGO */
 .catalogArea {
   padding: 28px 40px;
@@ -108,6 +147,10 @@
     padding: 12px 16px;
     font-size: 15px;
   }
+
+  .subfilters { padding: 16px 20px 0; gap: 8px; }
+
+  .subfilterBtn { padding: 7px 14px; font-size: 13px; }
 
   .catalogArea { padding: 20px; }
 
