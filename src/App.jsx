@@ -17,6 +17,7 @@ import AdminRoute from './components/AdminRoute'
 import SizeGuide from './pages/SizeGuide'
 import Footer from './components/Footer'
 import HowToBuy from './pages/HowToBuy'
+import NotFound from './pages/NotFound'
 import { IconWhatsApp } from './components/icons/Icon'
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/nosotros" element={<About />} />
               <Route path="/producto/:id" element={<ProductDetail />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <a
               href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}?text=Hola! Quiero consultar sobre sus productos 🐾`}

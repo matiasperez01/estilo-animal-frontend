@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useProductos } from '../hooks/useProductos'
 import ProductCard from '../components/ProductCard'
+import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
-import { IconPaw, IconCat } from '../components/icons/Icon'
+import { IconPaw, IconCat, IconSearch, IconX } from '../components/icons/Icon'
 import styles from './Catalog.module.css'
 
 const SUBCATEGORIAS = [
@@ -52,6 +53,7 @@ export default function Catalog() {
   const categoriaUrl = searchParams.get('categoria') ?? 'todos'
   const [activeFilter, setActiveFilter] = useState(especieUrl)
   const [activeCategory, setActiveCategory] = useState(categoriaUrl)
+  const [search, setSearch] = useState('')
   const { productos, loading, error } = useProductos()
   const { toast, showToast } = useToast()
 
@@ -80,13 +82,34 @@ export default function Catalog() {
   }
 
   const adaptados = productos.map(adaptarProducto)
-  const filtered = filtrarProductos(adaptados, activeFilter, activeCategory)
+  const filteredPorCategoria = filtrarProductos(adaptados, activeFilter, activeCategory)
+  const busqueda = search.trim().toLowerCase()
+  const filtered = busqueda
+    ? filteredPorCategoria.filter(p => p.name.toLowerCase().includes(busqueda))
+    : filteredPorCategoria
 
   return (
     <main className={styles.page}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Tienda</h1>
-        <p className={styles.sub}>Ropa, accesorios y juguetes para tu mascota</p>
+        <div>
+          <h1 className={styles.title}>Tienda</h1>
+          <p className={styles.sub}>Ropa, accesorios y juguetes para tu mascota</p>
+        </div>
+        <div className={styles.searchBox}>
+          <IconSearch width={17} height={17} />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Buscar productos..."
+            aria-label="Buscar productos"
+          />
+          {search && (
+            <button onClick={() => setSearch('')} aria-label="Limpiar búsqueda" className={styles.searchClear}>
+              <IconX width={14} height={14} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className={styles.filters}>
@@ -128,20 +151,30 @@ export default function Catalog() {
       )}
 
       <div className={styles.catalogArea}>
-        {loading && <p className={styles.estado}>Cargando productos...</p>}
+        {loading && (
+          <div className={styles.grid}>
+            {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
+          </div>
+        )}
         {error && <p className={styles.estadoError}>No se pudo conectar con el servidor.</p>}
         {!loading && !error && (
           <>
             <p className={styles.count}>{filtered.length} productos</p>
-            <div className={styles.grid}>
-              {filtered.map(producto => (
-                <ProductCard
-                  key={producto.id}
-                  product={producto}
-                  onAdded={(name) => showToast(`${name} agregado al carrito`)}
-                />
-              ))}
-            </div>
+            {filtered.length === 0 ? (
+              <p className={styles.estado}>
+                No encontramos productos {busqueda ? `para "${search}"` : 'con estos filtros'}.
+              </p>
+            ) : (
+              <div className={styles.grid}>
+                {filtered.map(producto => (
+                  <ProductCard
+                    key={producto.id}
+                    product={producto}
+                    onAdded={(name) => showToast(`${name} agregado al carrito`)}
+                  />
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

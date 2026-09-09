@@ -66,7 +66,23 @@ useEffect(() => {
     window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank')
   }
 
-  if (loading) return <div className={styles.loading}>Cargando...</div>
+  if (loading) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.layout}>
+          <div className={`skeleton ${styles.skeletonImg}`} />
+          <div className={styles.infoSection}>
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '30%', height: 12 }} />
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '70%', height: 28 }} />
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '100%', height: 14 }} />
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '90%', height: 14 }} />
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '35%', height: 34 }} />
+            <div className={`skeleton ${styles.skeletonLine}`} style={{ width: '100%', height: 48 }} />
+          </div>
+        </div>
+      </main>
+    )
+  }
   if (!producto) return <div className={styles.loading}>Producto no encontrado</div>
 
   const precioMostrado = selectedVariante
@@ -101,7 +117,7 @@ useEffect(() => {
               className={`${styles.imgThumb} ${imagenActiva === i ? styles.imgThumbActive : ''}`}
               onClick={() => setImagenActiva(i)}
             >
-              <img src={img.url} alt={`Foto ${i + 1}`} />
+              <img src={img.url} alt={`Foto ${i + 1}`} loading="lazy" />
             </button>
           ))}
         </div>

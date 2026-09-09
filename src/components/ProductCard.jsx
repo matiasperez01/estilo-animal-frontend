@@ -25,7 +25,7 @@ export default function ProductCard({ product }) {
     >
       <div className={styles.imgWrapper}>
         {imagen ? (
-          <img src={imagen} alt={product.name} className={styles.img} />
+          <img src={imagen} alt={product.name} className={styles.img} loading="lazy" />
         ) : (
           <div className={styles.imgPlaceholder}>
             {isGato ? <IconCat width={40} height={40} /> : <IconPaw width={36} height={36} />}

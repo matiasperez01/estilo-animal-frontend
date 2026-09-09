@@ -56,6 +56,17 @@
   gap: 16px;
 }
 
+/* SKELETON */
+.skeletonImg {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-xl);
+}
+
+.skeletonLine {
+  border-radius: var(--radius-sm);
+}
+
 .especie {
   font-size: 12px;
   letter-spacing: 1.5px;

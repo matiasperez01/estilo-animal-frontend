@@ -103,6 +103,19 @@ h1, h2 {
   font-family: var(--font-display);
 }
 
+/* Skeletons */
+@keyframes skeleton-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-bg-tertiary) 37%, var(--color-bg-secondary) 63%);
+  background-size: 400px 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
 .heroTitle, .sectionTitle, .bannerTitle {
   font-family: var(--font-display);
 }

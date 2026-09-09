@@ -141,3 +141,15 @@
   cursor: not-allowed;
 }
 .addBtnDisabled:hover { opacity: 1; }
+
+/* SKELETON */
+.skeletonLine {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeletonBtn {
+  width: 76px;
+  height: 26px;
+  border-radius: var(--radius-md);
+}

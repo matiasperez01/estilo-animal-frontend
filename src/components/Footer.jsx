@@ -10,7 +10,7 @@ export default function Footer() {
       <div className={styles.grid}>
 
         <div className={styles.brand}>
-          <img src="/logo.png" alt="Estilo Animal RG" className={styles.logo} />
+          <img src="/logo.png" alt="Estilo Animal RG" className={styles.logo} loading="lazy" />
           <p className={styles.tagline}>Indumentaria y accesorios para mascotas.</p>
           <p className={styles.location}><IconMapPin width={14} height={14} /> Río Grande, Tierra del Fuego</p>
 <div className={styles.socials}>

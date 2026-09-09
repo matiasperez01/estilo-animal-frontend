@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useProductosDestacados } from '../hooks/useProductos'
 import ProductCard from '../components/ProductCard'
+import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import {
@@ -50,7 +51,7 @@ const WA = import.meta.env.VITE_WHATSAPP_NUMBER
 
 export default function Home() {
   const { toast, showToast } = useToast()
-  const { productos: destacados } = useProductosDestacados()
+  const { productos: destacados, loading: loadingDestacados } = useProductosDestacados()
   const featuredAdaptados = destacados.map(adaptarProducto)
 
   return (
@@ -100,20 +101,22 @@ export default function Home() {
   <span><IconWhatsApp width={14} height={14} /> Atención por WhatsApp</span>
 </div>
 
-      {featuredAdaptados.length > 0 && (
+      {(loadingDestacados || featuredAdaptados.length > 0) && (
         <section className={styles.featured}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Productos destacados</h2>
             <Link to="/tienda" className={styles.seeAll}>Ver todos →</Link>
           </div>
           <div className={styles.grid}>
-            {featuredAdaptados.map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAdded={(name) => showToast(`${name} agregado al carrito`)}
-              />
-            ))}
+            {loadingDestacados
+              ? Array.from({ length: 5 }).map((_, i) => <ProductCardSkeleton key={i} />)
+              : featuredAdaptados.map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAdded={(name) => showToast(`${name} agregado al carrito`)}
+                />
+              ))}
           </div>
         </section>
       )}

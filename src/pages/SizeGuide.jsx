@@ -85,7 +85,7 @@ export default function SizeGuide() {
         </div>
 
         <div className={styles.imgWrapper}>
-          <img src="/guia-medidas.jpg" alt="Cómo medir a tu mascota" className={styles.medidasImg} />
+          <img src="/guia-medidas.jpg" alt="Cómo medir a tu mascota" className={styles.medidasImg} loading="lazy" />
         </div>
       </section>
 

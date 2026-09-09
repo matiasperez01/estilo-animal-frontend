@@ -42,7 +42,7 @@ const navigate = useNavigate()
               <div key={`${product.id}-${size}`} className={styles.item}>
                 <div className={styles.itemImg}>
                   {product.imagenUrl
-                    ? <img src={product.imagenUrl} alt={product.name} />
+                    ? <img src={product.imagenUrl} alt={product.name} loading="lazy" />
                     : <IconShoppingBag width={20} height={20} />}
                 </div>
                 <div className={styles.itemInfo}>

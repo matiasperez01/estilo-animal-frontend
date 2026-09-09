@@ -244,7 +244,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
               <div key={`${product.id}-${size}`} className={styles.summaryItem}>
                 <div className={styles.summaryImg}>
                   {product.imagenUrl
-                    ? <img src={product.imagenUrl} alt={product.name} />
+                    ? <img src={product.imagenUrl} alt={product.name} loading="lazy" />
                     : <IconShoppingBag width={18} height={18} />}
                 </div>
                 <div className={styles.summaryInfo}>
