@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useProductos } from '../hooks/useProductos'
-import { CATEGORIES } from '../store/products'
 import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
@@ -9,15 +8,9 @@ import styles from './Catalog.module.css'
 
 function filtrarProductos(productos, filtro) {
   if (filtro === 'todos') return productos
-  const filtroEspecie = ['perro', 'gato']
   return productos.filter(p => {
     const especie = p.species ?? ''
-    const categoria = p.category ?? ''
-    if (filtroEspecie.includes(filtro)) {
-      return especie === filtro || especie === 'ambos'
-    } else {
-      return categoria === filtro
-    }
+    return especie === filtro || especie === 'ambos'
   })
 }
 
@@ -31,6 +24,7 @@ function adaptarProducto(p) {
     price: Number(p.precio) || 0,
     sizes: [],
     image: p.imagenUrl ?? null,
+    imagenes: p.imagenes ?? [],
     badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
     stock: p.stock ?? 0,
     variantes: p.variantes ?? [],
@@ -39,21 +33,21 @@ function adaptarProducto(p) {
 
 export default function Catalog() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const categoriaUrl = searchParams.get('categoria') ?? 'todos'
-  const [activeFilter, setActiveFilter] = useState(categoriaUrl)
+  const especieUrl = searchParams.get('especie') ?? 'todos'
+  const [activeFilter, setActiveFilter] = useState(especieUrl)
   const { productos, loading, error } = useProductos()
   const { toast, showToast } = useToast()
 
   useEffect(() => {
-    setActiveFilter(categoriaUrl)
-  }, [categoriaUrl])
+    setActiveFilter(especieUrl)
+  }, [especieUrl])
 
   function setFilter(id) {
     setActiveFilter(id)
     if (id === 'todos') {
       setSearchParams({})
     } else {
-      setSearchParams({ categoria: id })
+      setSearchParams({ especie: id })
     }
   }
 
@@ -64,20 +58,31 @@ export default function Catalog() {
     <main className={styles.page}>
       <div className={styles.header}>
         <h1 className={styles.title}>Tienda</h1>
-        <p className={styles.sub}>Ropa y accesorios para tu mascota</p>
+        <p className={styles.sub}>Ropa, accesorios y juguetes para tu mascota</p>
       </div>
 
       <div className={styles.filters}>
-        <span className={styles.filterLabel}>Filtrar:</span>
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            className={`${styles.chip} ${activeFilter === cat.id ? styles.chipActive : ''}`}
-            onClick={() => setFilter(cat.id)}
-          >
-            {cat.label}
-          </button>
-        ))}
+        <button
+          className={`${styles.filterBtn} ${activeFilter === 'todos' ? styles.filterBtnActive : ''}`}
+          onClick={() => setFilter('todos')}
+        >
+          <span>🐾</span>
+          <span>Todos</span>
+        </button>
+        <button
+          className={`${styles.filterBtn} ${activeFilter === 'perro' ? styles.filterBtnActive : ''}`}
+          onClick={() => setFilter('perro')}
+        >
+          <span>🐶</span>
+          <span>Perros</span>
+        </button>
+        <button
+          className={`${styles.filterBtn} ${activeFilter === 'gato' ? styles.filterBtnActive : ''}`}
+          onClick={() => setFilter('gato')}
+        >
+          <span>🐱</span>
+          <span>Gatos</span>
+        </button>
       </div>
 
       <div className={styles.catalogArea}>

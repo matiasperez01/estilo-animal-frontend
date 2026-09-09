@@ -43,9 +43,8 @@ export default function Footer() {
           <p className={styles.colTitle}>Comprar</p>
           <Link to="/tienda">Ver productos</Link>
           <Link to="/guia-de-talles">Guía de talles</Link>
-<Link to="/tienda?categoria=abrigos">Abrigos</Link>
-<Link to="/tienda?categoria=accesorios">Accesorios</Link>
-<Link to="/tienda?categoria=juguetes">Juguetes</Link>
+<Link to="/tienda?especie=perro">Perros</Link>
+<Link to="/tienda?especie=gato">Gatos</Link>
         </div>
 
         <div className={styles.col}>

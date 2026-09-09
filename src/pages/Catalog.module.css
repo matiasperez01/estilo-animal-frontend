@@ -1,6 +1,4 @@
-.page {
-  padding-bottom: 48px;
-}
+.page { padding-bottom: 64px; }
 
 .header {
   padding: 40px 40px 28px;
@@ -12,6 +10,7 @@
   font-weight: 600;
   color: var(--color-text);
   margin-bottom: 6px;
+  font-family: var(--font-display);
 }
 
 .sub {
@@ -19,46 +18,55 @@
   color: var(--color-text-secondary);
 }
 
+/* FILTROS */
 .filters {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 40px;
+  gap: 16px;
+  padding: 28px 40px;
   border-bottom: 1px solid var(--color-border);
-  flex-wrap: wrap;
 }
 
-.filterLabel {
-  font-size: 13px;
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border: 1.5px solid var(--color-border-medium);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg);
   color: var(--color-text-secondary);
-  margin-right: 4px;
-}
-
-.chip {
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid var(--color-border-medium);
-  background: transparent;
-  color: var(--color-text-secondary);
   transition: all var(--transition);
+  font-family: var(--font-sans);
 }
 
-.chip:hover {
+.filterBtn span:first-child {
+  font-size: 22px;
+}
+
+.filterBtn:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
+  background: var(--color-accent-light);
 }
 
-.chipActive {
-  background: var(--color-accent);
+.filterBtnActive {
   border-color: var(--color-accent);
+  background: var(--color-accent);
   color: #fff;
 }
 
+.filterBtnActive:hover {
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+  color: #fff;
+}
+
+/* CATÁLOGO */
 .catalogArea {
-  padding: 24px 40px;
+  padding: 28px 40px;
 }
 
 .count {
@@ -69,8 +77,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
 }
 
 .estado {
@@ -85,9 +93,22 @@
   padding: 32px 0;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .header { padding: 28px 20px 20px; }
-  .filters { padding: 12px 20px; }
+
+  .filters {
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .filterBtn {
+    flex: 1;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
   .catalogArea { padding: 20px; }
 
   .grid {

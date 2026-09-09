@@ -119,18 +119,26 @@ export default function Home() {
 <section className={styles.cats}>
   <h2 className={styles.sectionTitle}>¿Qué estás buscando?</h2>
   <div className={styles.catsGrid}>
-    {[
-      { icon: '🧥', label: 'Abrigos',      cat: 'abrigos' },
-      { icon: '👕', label: 'Remeras',      cat: 'remeras' },
-      { icon: '🎀', label: 'Accesorios',   cat: 'accesorios' },
-      { icon: '🎾', label: 'Juguetes',     cat: 'juguetes' },
-      { icon: '⚽', label: 'Mundial 2026', cat: 'mundial 2026' },
-    ].map(({ icon, label, cat }) => (
-      <Link key={cat} to={`/tienda?categoria=${cat}`} className={styles.catCard}>
-        <span className={styles.catIcon}>{icon}</span>
-        <span>{label}</span>
-      </Link>
-    ))}
+    <Link to="/tienda?especie=perro" className={styles.catCard}>
+      <span className={styles.catIcon}>🐶</span>
+      <span>Perros</span>
+    </Link>
+    <Link to="/tienda?especie=gato" className={styles.catCard}>
+      <span className={styles.catIcon}>🐱</span>
+      <span>Gatos</span>
+    </Link>
+    <Link to="/tienda" className={styles.catCard}>
+      <span className={styles.catIcon}>🎾</span>
+      <span>Juguetes</span>
+    </Link>
+    <Link to="/tienda" className={styles.catCard}>
+      <span className={styles.catIcon}>🎀</span>
+      <span>Accesorios</span>
+    </Link>
+    <Link to="/tienda" className={styles.catCard}>
+      <span className={styles.catIcon}>⚽</span>
+      <span>Mundial 2026</span>
+    </Link>
   </div>
 </section>
 
