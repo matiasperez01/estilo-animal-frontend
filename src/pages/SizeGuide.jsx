@@ -1,3 +1,7 @@
+import {
+  IconRuler, IconAlertTriangle, IconLightbulb, IconClock,
+  IconPackage, IconRefresh, IconWhatsApp,
+} from '../components/icons/Icon'
 import styles from './SizeGuide.module.css'
 
 const WA = import.meta.env.VITE_WHATSAPP_NUMBER
@@ -52,14 +56,14 @@ export default function SizeGuide() {
           </p>
         </div>
         <div className={styles.heroBadge}>
-          <span>📏</span>
+          <IconRuler width={22} height={22} />
           <p>Si tenés dudas, <strong>siempre elegí el talle más grande</strong></p>
         </div>
       </section>
 
       {/* AVISO */}
       <div className={styles.alert}>
-        <span>⚠️</span>
+        <IconAlertTriangle width={20} height={20} />
         <p>
           <strong>Asegurate de medir a tu mascota antes de comprar.</strong> El peso es orientativo — las medidas son las que determinan el talle correcto. Dos perros del mismo peso pueden necesitar talles distintos.
         </p>
@@ -97,22 +101,10 @@ export default function SizeGuide() {
             <thead>
               <tr>
                 <th>Talle</th>
-                <th>
-                  <span className={styles.thIcon}>📏</span>
-                  Largo lomo
-                </th>
-                <th>
-                  <span className={styles.thIcon}>🫀</span>
-                  Pecho
-                </th>
-                <th>
-                  <span className={styles.thIcon}>🔴</span>
-                  Cuello
-                </th>
-                <th>
-                  <span className={styles.thIcon}>⚖️</span>
-                  Peso aprox.
-                </th>
+                <th>Largo lomo</th>
+                <th>Pecho</th>
+                <th>Cuello</th>
+                <th>Peso aprox.</th>
               </tr>
             </thead>
             <tbody>
@@ -132,7 +124,7 @@ export default function SizeGuide() {
         </div>
 
         <div className={styles.tableTip}>
-          <span>💡</span>
+          <IconLightbulb width={18} height={18} />
           <p>Si tu mascota tiene el pecho ancho o está entre dos talles, siempre elegí el talle más grande. Es preferible que sobre un poco a que quede ajustado.</p>
         </div>
       </section>
@@ -142,26 +134,22 @@ export default function SizeGuide() {
         <h2 className={styles.sectionTitle}>Política de cambios</h2>
         <div className={styles.politicaGrid}>
           <div className={styles.politicaCard}>
-            <span className={styles.politicaIcon}>⏱️</span>
+            <IconClock className={styles.politicaIcon} width={26} height={26} />
             <h3>48 horas</h3>
             <p>Los cambios se realizan dentro de las 48 horas de recibida la compra.</p>
           </div>
           <div className={styles.politicaCard}>
-            <span className={styles.politicaIcon}>📦</span>
+            <IconPackage className={styles.politicaIcon} width={26} height={26} />
             <h3>Prenda en buen estado</h3>
             <p>La prenda debe estar sin uso, sin manchas, sin olores y con todas sus etiquetas.</p>
           </div>
           <div className={styles.politicaCard}>
-            <span className={styles.politicaIcon}>🔄</span>
+            <IconRefresh className={styles.politicaIcon} width={26} height={26} />
             <h3>Sujeto a stock</h3>
             <p>Los cambios están sujetos a disponibilidad. Si no hay stock, buscamos una solución.</p>
           </div>
           <div className={styles.politicaCard}>
-            <span className={styles.politicaIcon}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-            </span>
+            <IconWhatsApp className={styles.politicaIcon} width={22} height={22} />
             <h3>Por WhatsApp</h3>
             <p>Coordinamos todo por WhatsApp. Escribinos con tu número de pedido.</p>
           </div>
@@ -177,9 +165,7 @@ export default function SizeGuide() {
           rel="noreferrer"
           className={styles.ctaBtn}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg> Consultanos por WhatsApp
+          <IconWhatsApp /> Consultanos por WhatsApp
         </a>
       </div>
 

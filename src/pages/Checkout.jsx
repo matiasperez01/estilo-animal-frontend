@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useCart } from '../store/CartContext'
 import { formatPrice } from '../store/products'
+import {
+  IconStore, IconTruck, IconCreditCard, IconBanknote,
+  IconWhatsApp, IconShoppingBag, IconCheckCircle,
+} from '../components/icons/Icon'
 import styles from './Checkout.module.css'
 
 const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER
@@ -168,11 +172,11 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
             <div className={styles.paymentOptions}>
               <label className={styles.paymentOption}>
                 <input type="radio" name="entrega" value="retirar" checked={form.entrega === 'retirar'} onChange={handleEntregaChange} />
-                <span>🏪 Retirar en el local</span>
+                <span><IconStore width={16} height={16} /> Retirar en el local</span>
               </label>
               <label className={styles.paymentOption}>
                 <input type="radio" name="entrega" value="envio" checked={form.entrega === 'envio'} onChange={handleEntregaChange} />
-                <span>🚚 Envío a domicilio</span>
+                <span><IconTruck width={16} height={16} /> Envío a domicilio</span>
               </label>
             </div>
 
@@ -202,11 +206,11 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
             <div className={styles.paymentOptions}>
               <label className={styles.paymentOption}>
                 <input type="radio" name="pago" value="transferencia" checked={form.pago === 'transferencia'} onChange={handleChange} />
-                <span>🏦 Transferencia bancaria</span>
+                <span><IconCreditCard width={16} height={16} /> Transferencia bancaria</span>
               </label>
               <label className={styles.paymentOption}>
                 <input type="radio" name="pago" value="efectivo" checked={form.pago === 'efectivo'} onChange={handleChange} />
-                <span>💵 Efectivo</span>
+                <span><IconBanknote width={16} height={16} /> Efectivo</span>
               </label>
             </div>
           </section>
@@ -224,7 +228,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
           </section>
 
           <button type="submit" className={styles.submitBtn}>
-            <span>📲</span> Enviar pedido por WhatsApp
+            <IconWhatsApp /> Enviar pedido por WhatsApp
           </button>
 
           <p className={styles.hint}>
@@ -239,7 +243,9 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
             {items.map(({ product, size, qty }) => (
               <div key={`${product.id}-${size}`} className={styles.summaryItem}>
                 <div className={styles.summaryImg}>
-                  {product.species === 'gato' ? '🐱' : '🐶'}
+                  {product.imagenUrl
+                    ? <img src={product.imagenUrl} alt={product.name} />
+                    : <IconShoppingBag width={18} height={18} />}
                 </div>
                 <div className={styles.summaryInfo}>
                   <p className={styles.summaryName}>{product.name}</p>
@@ -259,7 +265,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
     subtotal < LIMITE ? (
       <div className={styles.freeShipBar}>
         <p className={styles.freeShipText}>
-          Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis 🚚
+          <IconTruck width={14} height={14} /> Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis
         </p>
         <div className={styles.freeShipTrack}>
           <div className={styles.freeShipFill} style={{ width: `${progreso}%` }} />
@@ -267,7 +273,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
       </div>
     ) : (
       <div className={styles.freeShipReached}>
-        🎉 ¡Conseguiste envío gratis!
+        <IconCheckCircle width={15} height={15} /> ¡Conseguiste envío gratis!
       </div>
     )
   )
@@ -281,7 +287,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
     <span>Envío</span>
     <span style={{ color: envioGratis ? '#2E6B2E' : 'inherit', fontWeight: envioGratis ? 600 : 400 }}>
       {envioGratis
-        ? '🎉 Gratis'
+        ? 'Gratis'
         : form.barrio
           ? (costoEnvioBase > 0 ? formatPrice(costoEnvioBase) : 'Gratis')
           : 'Seleccioná tu barrio'}

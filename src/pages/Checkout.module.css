@@ -97,6 +97,12 @@
   background: var(--color-accent-light);
 }
 
+.paymentOption span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
 .textarea {
   padding: 9px 12px;
   border: 1px solid var(--color-border-medium);
@@ -166,8 +172,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  color: var(--color-text-muted);
+  overflow: hidden;
   flex-shrink: 0;
+}
+
+.summaryImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .summaryInfo { flex: 1; }
@@ -325,6 +338,9 @@
 }
 
 .freeShipText {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
   color: var(--color-text-secondary);
 }
@@ -346,6 +362,10 @@
 }
 
 .freeShipReached {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-size: 13px;
   font-weight: 600;
   color: #2E6B2E;

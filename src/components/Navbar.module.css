@@ -90,7 +90,7 @@
   transition: opacity var(--transition);
 }
 .cartBtn:hover { opacity: 0.88; }
-.cartIcon { font-size: 16px; }
+.cartIcon { flex-shrink: 0; }
 
 .badge {
   background: #fff;

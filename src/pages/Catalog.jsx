@@ -4,6 +4,7 @@ import { useProductos } from '../hooks/useProductos'
 import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
+import { IconPaw, IconCat } from '../components/icons/Icon'
 import styles from './Catalog.module.css'
 
 const SUBCATEGORIAS = [
@@ -93,21 +94,21 @@ export default function Catalog() {
           className={`${styles.filterBtn} ${activeFilter === 'todos' ? styles.filterBtnActive : ''}`}
           onClick={() => setFilter('todos')}
         >
-          <span>🐾</span>
+          <IconPaw width={18} height={18} />
           <span>Todos</span>
         </button>
         <button
           className={`${styles.filterBtn} ${activeFilter === 'perro' ? styles.filterBtnActive : ''}`}
           onClick={() => setFilter('perro')}
         >
-          <span>🐶</span>
+          <IconPaw width={18} height={18} />
           <span>Perros</span>
         </button>
         <button
           className={`${styles.filterBtn} ${activeFilter === 'gato' ? styles.filterBtnActive : ''}`}
           onClick={() => setFilter('gato')}
         >
-          <span>🐱</span>
+          <IconCat width={19} height={19} />
           <span>Gatos</span>
         </button>
       </div>

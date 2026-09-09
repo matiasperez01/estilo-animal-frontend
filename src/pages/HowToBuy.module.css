@@ -96,7 +96,7 @@
   flex: 1;
 }
 
-.pasoIcon { font-size: 24px; flex-shrink: 0; margin-top: 6px; }
+.pasoIcon { color: var(--color-accent); flex-shrink: 0; margin-top: 6px; }
 
 .pasoTitulo {
   font-size: 16px;
@@ -138,7 +138,7 @@
   background: var(--color-bg);
 }
 
-.pagoIcon { font-size: 28px; flex-shrink: 0; }
+.pagoIcon { color: var(--color-accent); flex-shrink: 0; }
 
 .pagoNombre {
   font-size: 15px;
@@ -153,6 +153,9 @@
 }
 
 .envioGratis {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 12px 16px;
   background: #E6F4E6;
   border-radius: var(--radius-md);
@@ -179,7 +182,12 @@
 .envioRow:last-child { border-bottom: none; }
 .envioRow:nth-child(even) { background: var(--color-bg-secondary); }
 
-.envioBarrio { color: var(--color-text); }
+.envioBarrio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text);
+}
 
 .envioCosto {
   font-weight: 600;
@@ -208,8 +216,9 @@
   padding: 16px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  font-size: 24px;
 }
+
+.cambioCard svg { color: var(--color-accent); flex-shrink: 0; margin-top: 2px; }
 
 .cambioTitulo {
   font-size: 14px;
@@ -244,7 +253,9 @@
 }
 
 .ctaBtn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 13px 28px;
   background: #25D366;
   color: #fff;

@@ -1,6 +1,7 @@
 import { useCart } from '../store/CartContext'
 import { formatPrice } from '../store/products'
 import { useNavigate } from 'react-router-dom'
+import { IconX, IconShoppingBag, IconTrash, IconTruck, IconCheckCircle } from './icons/Icon'
 import styles from './CartPanel.module.css'
 
 export default function CartPanel() {
@@ -24,13 +25,15 @@ const navigate = useNavigate()
       <aside className={`${styles.panel} ${isOpen ? styles.open : ''}`} role="dialog" aria-label="Carrito de compras">
         <div className={styles.header}>
           <h2 className={styles.title}>Tu carrito</h2>
-          <button className={styles.closeBtn} onClick={close} aria-label="Cerrar carrito">✕</button>
+          <button className={styles.closeBtn} onClick={close} aria-label="Cerrar carrito">
+            <IconX width={16} height={16} />
+          </button>
         </div>
 
         <div className={styles.items}>
           {items.length === 0 ? (
             <div className={styles.empty}>
-              <span className={styles.emptyIcon}>🛍️</span>
+              <IconShoppingBag className={styles.emptyIcon} width={36} height={36} />
               <p>Tu carrito está vacío</p>
               <button className={styles.emptyLink} onClick={close}>Ver productos</button>
             </div>
@@ -38,7 +41,9 @@ const navigate = useNavigate()
             items.map(({ product, size, qty }) => (
               <div key={`${product.id}-${size}`} className={styles.item}>
                 <div className={styles.itemImg}>
-                  {product.species === 'gato' ? '🐱' : '🐶'}
+                  {product.imagenUrl
+                    ? <img src={product.imagenUrl} alt={product.name} />
+                    : <IconShoppingBag width={20} height={20} />}
                 </div>
                 <div className={styles.itemInfo}>
                   <p className={styles.itemName}>{product.name}</p>
@@ -53,7 +58,9 @@ const navigate = useNavigate()
                 </div>
                 <div className={styles.itemRight}>
                   <span className={styles.itemPrice}>{formatPrice(product.price * qty)}</span>
-                  <button className={styles.removeBtn} onClick={() => remove(product.id, size)} aria-label="Eliminar">🗑</button>
+                  <button className={styles.removeBtn} onClick={() => remove(product.id, size)} aria-label="Eliminar">
+                    <IconTrash width={15} height={15} />
+                  </button>
                 </div>
               </div>
             ))
@@ -74,7 +81,7 @@ const navigate = useNavigate()
   return subtotal < LIMITE ? (
     <div className={styles.freeShipBar}>
       <p className={styles.freeShipText}>
-        Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis 🚚
+        <IconTruck width={14} height={14} /> Te faltan <strong>{formatPrice(falta)}</strong> para envío gratis
       </p>
       <div className={styles.freeShipTrack}>
         <div className={styles.freeShipFill} style={{ width: `${progreso}%` }} />
@@ -82,7 +89,7 @@ const navigate = useNavigate()
     </div>
   ) : (
     <div className={styles.freeShipReached}>
-      🎉 ¡Conseguiste envío gratis!
+      <IconCheckCircle width={15} height={15} /> ¡Conseguiste envío gratis!
     </div>
   )
 })()}

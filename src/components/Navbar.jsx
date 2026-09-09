@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
+import { IconShoppingBag, IconX, IconMenu } from './icons/Icon'
 import styles from './Navbar.module.css'
 
 const WA = import.meta.env.VITE_WHATSAPP_NUMBER
@@ -50,7 +51,7 @@ export default function Navbar() {
           onClick={() => dispatch({ type: 'OPEN_CART' })}
           aria-label="Abrir carrito"
         >
-          <span className={styles.cartIcon}>🛍️</span>
+          <IconShoppingBag className={styles.cartIcon} width={17} height={17} />
           <span className={styles.cartLabel}>Carrito</span>
           {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
         </button>
@@ -60,7 +61,7 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menú"
         >
-          {menuOpen ? '✕' : '☰'}
+          {menuOpen ? <IconX width={18} height={18} /> : <IconMenu width={18} height={18} />}
         </button>
       </div>
 

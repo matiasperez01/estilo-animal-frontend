@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { formatPrice } from '../store/products'
+import { IconPaw, IconCat } from './icons/Icon'
 import styles from './ProductCard.module.css'
 
 export default function ProductCard({ product }) {
@@ -27,7 +28,7 @@ export default function ProductCard({ product }) {
           <img src={imagen} alt={product.name} className={styles.img} />
         ) : (
           <div className={styles.imgPlaceholder}>
-            <span>{isGato ? '🐱' : '🐶'}</span>
+            {isGato ? <IconCat width={40} height={40} /> : <IconPaw width={36} height={36} />}
           </div>
         )}
         <span className={`${styles.badge} ${isGato ? styles.badgeCat : product.species === 'ambos' ? styles.badgeBoth : styles.badgeDog}`}>

@@ -42,7 +42,7 @@
 }
 
 .icon {
-  font-size: 32px;
+  color: var(--color-accent);
   display: block;
   margin-bottom: 16px;
 }

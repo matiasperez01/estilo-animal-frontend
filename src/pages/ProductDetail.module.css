@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 80px;
+  color: var(--color-text-muted);
 }
 
 .infoSection {
@@ -101,6 +101,11 @@
   font-size: 13px;
   font-weight: 600;
 }
+.stockBadge span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
 .enStock  { color: #2E6B2E; }
 .stockBajo { color: #B8860B; }
 .sinStock { color: #C44A1A; }
@@ -132,6 +137,9 @@
 }
 
 .guiaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   color: var(--color-accent);
   text-decoration: none;
@@ -203,6 +211,10 @@
 }
 
 .addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
   padding: 14px;
   background: var(--color-accent);
   color: #fff;
@@ -218,6 +230,10 @@
 .addBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .waBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
   padding: 13px;
   background: #25D366;
   color: #fff;

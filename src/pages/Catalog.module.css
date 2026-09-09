@@ -42,8 +42,8 @@
   font-family: var(--font-sans);
 }
 
-.filterBtn span:first-child {
-  font-size: 22px;
+.filterBtn svg {
+  flex-shrink: 0;
 }
 
 .filterBtn:hover {

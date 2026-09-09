@@ -1,3 +1,4 @@
+import { IconPaw, IconScissors, IconTruck } from '../components/icons/Icon'
 import styles from './About.module.css'
 
 export default function About() {
@@ -13,7 +14,7 @@ export default function About() {
 
       <div className={styles.content}>
         <div className={styles.block}>
-          <span className={styles.icon}>🐾</span>
+          <IconPaw className={styles.icon} width={28} height={28} />
           <h2>Un emprendimiento con corazón</h2>
           <p>
             Somos una familia amantes de los animales. Seleccionamos cada prenda
@@ -22,7 +23,7 @@ export default function About() {
           </p>
         </div>
         <div className={styles.block}>
-          <span className={styles.icon}>✂️</span>
+          <IconScissors className={styles.icon} width={28} height={28} />
           <h2>Calidad en cada detalle</h2>
           <p>
             Te traemos materiales seleccionados, suaves para la piel y
@@ -31,7 +32,7 @@ export default function About() {
           </p>
         </div>
         <div className={styles.block}>
-          <span className={styles.icon}>🚚</span>
+          <IconTruck className={styles.icon} width={28} height={28} />
           <h2>Envíos a todo la provincia</h2>
           <p>
             Despachamos a toda la provincia de Tierra del Fuego. Aceptamos transferencia o efectivo. Tu pedido llega directo a la puerta de tu casa.

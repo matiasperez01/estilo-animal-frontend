@@ -4,6 +4,10 @@ import { useCart } from '../store/CartContext'
 import { formatPrice } from '../store/products'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
+import {
+  IconPaw, IconCat, IconX, IconZap, IconCheck, IconRuler,
+  IconShoppingBag, IconWhatsApp, IconTruck, IconRefresh,
+} from '../components/icons/Icon'
 import styles from './ProductDetail.module.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -107,7 +111,7 @@ useEffect(() => {
     <img src={producto.imagenUrl} alt={producto.nombre} className={styles.img} />
   ) : (
     <div className={styles.imgPlaceholder}>
-      <span>{producto.especie === 'gato' ? '🐱' : '🐶'}</span>
+      {producto.especie === 'gato' ? <IconCat width={64} height={64} /> : <IconPaw width={56} height={56} />}
     </div>
   )}
 </div>
@@ -136,11 +140,11 @@ useEffect(() => {
           {/* STOCK */}
           <div className={styles.stockBadge}>
             {sinStock ? (
-              <span className={styles.sinStock}>✗ Sin stock en este talle</span>
+              <span className={styles.sinStock}><IconX width={13} height={13} /> Sin stock en este talle</span>
             ) : stockBajo ? (
-              <span className={styles.stockBajo}>⚡ Últimas {stockMostrado} unidades</span>
+              <span className={styles.stockBajo}><IconZap /> Últimas {stockMostrado} unidades</span>
             ) : (
-              <span className={styles.enStock}>✓ En stock</span>
+              <span className={styles.enStock}><IconCheck width={13} height={13} /> En stock</span>
             )}
           </div>
 
@@ -152,7 +156,7 @@ useEffect(() => {
                   Talle seleccionado: <strong>{selectedVariante?.talle ?? '—'}</strong>
                 </p>
                 <a href="/guia-de-talles" className={styles.guiaLink} target="_blank" rel="noreferrer">
-                  📏 Guía de talles
+                  <IconRuler width={13} height={13} /> Guía de talles
                 </a>
               </div>
               <div className={styles.variantesGrid}>
@@ -193,25 +197,25 @@ useEffect(() => {
               onClick={addToCart}
               disabled={sinStock || (variantes.length > 0 && !selectedVariante)}
             >
-              🛒 Agregar al carrito
+              <IconShoppingBag width={18} height={18} /> Agregar al carrito
             </button>
             <button className={styles.waBtn} onClick={consultarWA}>
-              💬 Consultar por WhatsApp
+              <IconWhatsApp /> Consultar por WhatsApp
             </button>
           </div>
 
           {/* CONFIANZA */}
           <div className={styles.trustMini}>
             <div className={styles.trustMiniItem}>
-              <span>🚚</span>
+              <IconTruck width={16} height={16} />
               <span>Envío a domicilio en Río Grande</span>
             </div>
             <div className={styles.trustMiniItem}>
-              <span>🔄</span>
+              <IconRefresh width={16} height={16} />
               <span>Cambios dentro de las 48hs</span>
             </div>
             <div className={styles.trustMiniItem}>
-              <span>💬</span>
+              <IconWhatsApp />
               <span>Atención personalizada por WhatsApp</span>
             </div>
           </div>

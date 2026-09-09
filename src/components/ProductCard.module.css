@@ -34,9 +34,9 @@
 .card:hover .img { transform: scale(1.04); }
 
 .imgPlaceholder {
-  font-size: 56px;
-  line-height: 1;
-  opacity: 0.45;
+  display: flex;
+  color: var(--color-text-muted);
+  opacity: 0.6;
 }
 
 .badge {
