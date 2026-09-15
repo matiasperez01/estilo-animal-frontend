@@ -26,7 +26,7 @@ const PASOS = [
     num: '1',
     titulo: 'Largo del lomo',
     desc: 'Medí desde la base del cuello hasta el inicio de la cola, siguiendo la línea del lomo. Tu mascota debe estar parada.',
-    color: '#B8860B',
+    color: '#A8720F',
   },
   {
     num: '2',

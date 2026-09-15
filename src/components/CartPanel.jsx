@@ -103,7 +103,7 @@ const navigate = useNavigate()
             </div>
             <button className={styles.checkoutBtn} onClick={() => { dispatch({ type: 'CLOSE_CART' }); navigate('/checkout') }}>
 
-              Finalizar compra →
+              Finalizar compra
             </button>
           </div>
         )}

@@ -69,7 +69,7 @@ export default function Home() {
     Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
   </p>
   <div className={styles.heroCtas}>
-    <Link to="/tienda" className={styles.heroCta}>Ver productos →</Link>
+    <Link to="/tienda" className={styles.heroCta}>Ver productos</Link>
     <a
   href={`https://wa.me/${WA}?text=Hola! Quiero consultar sobre sus productos 🐾`}
   target="_blank"
@@ -105,7 +105,7 @@ export default function Home() {
         <section className={styles.featured}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Productos destacados</h2>
-            <Link to="/tienda" className={styles.seeAll}>Ver todos →</Link>
+            <Link to="/tienda" className={styles.seeAll}>Ver todos</Link>
           </div>
           <div className={styles.grid}>
             {loadingDestacados
@@ -154,7 +154,7 @@ export default function Home() {
             <h2 className={styles.sizeGuideTitle}>¿No sabés qué talle elegir?</h2>
             <p className={styles.sizeGuideSub}>Consultá nuestra guía con medidas detalladas y aprendé a medir a tu mascota en simples pasos.</p>
           </div>
-          <Link to="/guia-de-talles" className={styles.sizeGuideBtn}>Ver guía de talles →</Link>
+          <Link to="/guia-de-talles" className={styles.sizeGuideBtn}>Ver guía de talles</Link>
         </div>
       </section>
 
@@ -178,8 +178,7 @@ export default function Home() {
       </section>
 
       <section className={styles.banner}>
-        <p className={styles.bannerEyebrow}>Río Grande, Tierra del Fuego</p>
-        <h2 className={styles.bannerTitle}>Compra desde tu casa</h2>
+        <h2 className={styles.bannerTitle}>Compra desde tu casa, en Río Grande</h2>
         <p className={styles.bannerSub}>Envíos a domicilio y retiro en local. Aceptamos transferencia y efectivo.</p>
         <div className={styles.bannerCtas}>
           <Link to="/tienda" className={styles.bannerCta}>Ver productos</Link>

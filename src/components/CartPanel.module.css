@@ -263,7 +263,7 @@
 
 .freeShipFill {
   height: 100%;
-  background: #2E6B2E;
+  background: var(--color-pine);
   border-radius: var(--radius-full);
   transition: width 0.4s ease;
 }
@@ -275,7 +275,7 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #2E6B2E;
+  color: var(--color-pine);
   text-align: center;
   padding: 8px 0;
 }

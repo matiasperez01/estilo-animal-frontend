@@ -303,7 +303,7 @@
 }
 
 .shippingFree {
-  color: #2E6B2E;
+  color: var(--color-pine);
   font-weight: 600;
 }
 
@@ -320,7 +320,7 @@
   cursor: pointer;
   width: 100%;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23B8860B' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A8720F' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 36px;
@@ -356,7 +356,7 @@
 
 .freeShipFill {
   height: 100%;
-  background: #2E6B2E;
+  background: var(--color-pine);
   border-radius: var(--radius-full);
   transition: width 0.4s ease;
 }
@@ -368,7 +368,7 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #2E6B2E;
+  color: var(--color-pine);
   text-align: center;
   padding: 8px 0;
 }
