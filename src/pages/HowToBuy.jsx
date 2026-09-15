@@ -14,7 +14,7 @@ const PASOS = [
     titulo: 'Explorá el catálogo',
     desc: 'Navegá por nuestros productos, filtrá por categoría o especie y encontrá lo  mejor para tu mascota.',
     link: '/tienda',
-    linkLabel: 'Ver productos →',
+    linkLabel: 'Ver productos',
   },
   {
     num: '02',
@@ -22,7 +22,7 @@ const PASOS = [
     titulo: 'Elegí el talle correcto',
     desc: 'Si llevas ropa, asegurate de elegir el talle correcto. Consultá nuestra guía de talles para no equivocarte.',
     link: '/guia-de-talles',
-    linkLabel: 'Ver guía de talles →',
+    linkLabel: 'Ver guía de talles',
   },
   {
     num: '03',
@@ -172,7 +172,7 @@ export default function HowToBuy() {
         >
           <IconWhatsApp /> Escribinos por WhatsApp
         </a>
-        <Link to="/tienda" className={styles.ctaBtnSecondary}>Ver productos →</Link>
+        <Link to="/tienda" className={styles.ctaBtnSecondary}>Ver productos</Link>
       </div>
 
     </main>

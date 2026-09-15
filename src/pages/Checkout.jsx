@@ -285,7 +285,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
 {form.entrega === 'envio' && (
   <div className={styles.summaryRow}>
     <span>Envío</span>
-    <span style={{ color: envioGratis ? '#2E6B2E' : 'inherit', fontWeight: envioGratis ? 600 : 400 }}>
+    <span style={{ color: envioGratis ? '#33513E' : 'inherit', fontWeight: envioGratis ? 600 : 400 }}>
       {envioGratis
         ? 'Gratis'
         : form.barrio
