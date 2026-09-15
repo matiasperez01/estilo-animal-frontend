@@ -1,11 +1,20 @@
 import { useState } from 'react'
+import { adminFetch } from '../../lib/adminAuth'
 import { formatPrice } from '../../store/products'
 import tableStyles from './AdminTable.module.css'
 import styles from './ProductLineItems.module.css'
 
-export default function ProductLineItems({ productos, items, onChange, autoFillPrice = true, priceLabel = 'Precio' }) {
+const API = import.meta.env.VITE_API_URL
+
+export default function ProductLineItems({
+  productos, items, onChange, autoFillPrice = true, priceLabel = 'Precio',
+  allowCreateProduct = false, onProductCreated,
+}) {
   const [query, setQuery] = useState('')
   const [staged, setStaged] = useState(null)
+  const [creandoProducto, setCreandoProducto] = useState(false)
+  const [nuevoNombre, setNuevoNombre] = useState('')
+  const [guardandoProducto, setGuardandoProducto] = useState(false)
 
   const resultados = query.trim()
     ? productos.filter(p => p.nombre.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6)
@@ -58,6 +67,22 @@ export default function ProductLineItems({ productos, items, onChange, autoFillP
     onChange(items.filter((_, i) => i !== index))
   }
 
+  async function crearProducto() {
+    if (!nuevoNombre.trim()) return
+    setGuardandoProducto(true)
+    const res = await adminFetch(`${API}/api/productos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre: nuevoNombre.trim(), precio: 0, stock: 0, stockMinimo: 1, destacado: false }),
+    })
+    const creado = await res.json()
+    setGuardandoProducto(false)
+    setCreandoProducto(false)
+    setNuevoNombre('')
+    onProductCreated?.(creado)
+    elegirProducto(creado)
+  }
+
   return (
     <div className={styles.wrapper}>
       {!staged && (
@@ -78,6 +103,32 @@ export default function ProductLineItems({ productos, items, onChange, autoFillP
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {!staged && allowCreateProduct && !creandoProducto && (
+        <button type="button" className={styles.crearProductoLink} onClick={() => setCreandoProducto(true)}>
+          + Es un producto nuevo, no está en mi catálogo
+        </button>
+      )}
+
+      {!staged && creandoProducto && (
+        <div className={styles.stagedRow}>
+          <input
+            type="text"
+            value={nuevoNombre}
+            onChange={e => setNuevoNombre(e.target.value)}
+            placeholder="Nombre del producto nuevo"
+            className={styles.searchInput}
+            style={{ flex: '1 1 200px' }}
+            autoFocus
+          />
+          <button type="button" className={tableStyles.btnPrimary} onClick={crearProducto} disabled={guardandoProducto}>
+            {guardandoProducto ? 'Creando...' : 'Crear y agregar'}
+          </button>
+          <button type="button" className={tableStyles.btnSecondary} onClick={() => { setCreandoProducto(false); setNuevoNombre('') }}>
+            Cancelar
+          </button>
         </div>
       )}
 

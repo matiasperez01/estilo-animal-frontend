@@ -284,6 +284,8 @@ export default function AdminProveedores() {
                   onChange={setItems}
                   autoFillPrice={false}
                   priceLabel="Costo"
+                  allowCreateProduct
+                  onProductCreated={p => setProductos(prev => [...prev, p])}
                 />
               </section>
 
