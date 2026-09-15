@@ -73,3 +73,45 @@
   transition: opacity var(--transition);
 }
 .logoutBtn:hover { opacity: 0.7; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+  }
+
+  .sidebarTitle { display: none; }
+
+  .sidebarNav {
+    flex-direction: row;
+    flex: none;
+    gap: 6px;
+  }
+
+  .link, .linkActive {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .backLink, .logoutBtn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 9px 12px;
+  }
+
+  .content { padding: 16px; }
+}

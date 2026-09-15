@@ -15,6 +15,11 @@
   color: var(--color-text-muted);
 }
 
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -206,6 +211,26 @@
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; min-width: 0; }
 
+.section {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.optional {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
 .formFooter {
   display: flex;
   justify-content: flex-end;
@@ -334,4 +359,29 @@
   font-weight: 600;
   text-align: center;
   padding: 3px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .table { min-width: 560px; }
+  .table th, .table td { white-space: nowrap; }
+
+  .row2, .row3 { grid-template-columns: 1fr; }
+
+  .modalOverlay { padding: 0; }
+
+  .modal {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .form { padding: 16px; }
 }

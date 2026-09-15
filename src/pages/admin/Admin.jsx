@@ -17,6 +17,12 @@ export default function Admin() {
           <NavLink to="/admin/pedidos" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
   📋 Pedidos
 </NavLink>
+          <NavLink to="/admin/ventas" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
+  💰 Ventas
+</NavLink>
+          <NavLink to="/admin/proveedores" className={({ isActive }) => isActive ? styles.linkActive : styles.link}>
+  🚚 Proveedores
+</NavLink>
         </nav>
         <a href="/" className={styles.backLink}>← Volver a la tienda</a>
 <button

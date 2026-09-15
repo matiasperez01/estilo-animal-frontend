@@ -34,7 +34,7 @@ export default function AdminPedidos() {
   async function cargar() {
     setLoading(true)
     const data = await adminFetch(`${API}/api/ventas`).then(r => r.json())
-    setPedidos(data)
+    setPedidos(data.filter(v => v.origen !== 'MANUAL'))
     setLoading(false)
   }
 

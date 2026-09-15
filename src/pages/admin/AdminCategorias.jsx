@@ -69,6 +69,7 @@ export default function AdminCategorias() {
       {loading ? (
         <p className={styles.estado}>Cargando...</p>
       ) : (
+        <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -92,6 +93,7 @@ export default function AdminCategorias() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
 
       {showForm && (

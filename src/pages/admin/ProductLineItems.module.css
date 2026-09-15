@@ -1,0 +1,95 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.searchBox {
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+}
+.searchInput:focus { border-color: var(--color-accent); }
+
+.results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.resultItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+.resultItem:hover { background: var(--color-bg-secondary); }
+
+.stagedRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.stagedNombre {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  flex: 1 1 160px;
+}
+
+.stagedSelect,
+.stagedCantidad,
+.stagedPrecio {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+}
+
+.stagedCantidad { width: 68px; }
+.stagedPrecio { width: 100px; }
+
+.itemsTable {
+  min-width: 480px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .stagedRow { flex-direction: column; align-items: stretch; }
+  .stagedNombre { flex: none; }
+  .stagedSelect,
+  .stagedCantidad,
+  .stagedPrecio { width: 100%; }
+}

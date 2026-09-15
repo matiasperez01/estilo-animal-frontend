@@ -203,6 +203,7 @@ async function eliminarVariante(varianteId) {
       {loading ? (
         <p className={styles.estado}>Cargando...</p>
       ) : (
+        <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -234,6 +235,7 @@ async function eliminarVariante(varianteId) {
             ))}
           </tbody>
         </table>
+        </div>
       )}
 
       {showForm && (

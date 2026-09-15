@@ -13,6 +13,8 @@ import AdminLogin from './pages/admin/AdminLogin'
 import AdminProductos from './pages/admin/AdminProductos'
 import AdminCategorias from './pages/admin/AdminCategorias'
 import AdminPedidos from './pages/admin/AdminPedidos'
+import AdminVentas from './pages/admin/AdminVentas'
+import AdminProveedores from './pages/admin/AdminProveedores'
 import AdminRoute from './components/AdminRoute'
 import SizeGuide from './pages/SizeGuide'
 import Footer from './components/Footer'
@@ -35,6 +37,8 @@ export default function App() {
           <Route index element={<AdminProductos />} />
           <Route path="categorias" element={<AdminCategorias />} />
           <Route path="pedidos" element={<AdminPedidos />} />
+          <Route path="ventas" element={<AdminVentas />} />
+          <Route path="proveedores" element={<AdminProveedores />} />
         </Route>
 
         <Route path="/*" element={
