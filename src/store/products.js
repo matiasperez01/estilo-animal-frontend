@@ -20,3 +20,19 @@ export function filterProducts(products, filter) {
 export function formatPrice(amount) {
   return '$' + amount.toLocaleString('es-AR')
 }
+
+// Tipos de atributo predefinidos para las variantes de un producto (Talle, Color, etc.)
+export const TIPOS_VARIANTE = ['Talle', 'Color', 'Sabor', 'Tamaño']
+
+// Nombre a mostrar para el atributo de variante de un producto. Sin tipoVariante
+// cargado se asume "Talle" (productos ya existentes, todos con talles).
+export function varianteLabel(tipoVariante) {
+  return tipoVariante || 'Talle'
+}
+
+// Plural del label (Talles, Colores, Sabores, Tamaños...). Termina en vocal -> +s,
+// termina en consonante -> +es (regla general del español).
+export function varianteLabelPlural(tipoVariante) {
+  const label = varianteLabel(tipoVariante)
+  return /[aeiouáéíóú]$/i.test(label) ? `${label}s` : `${label}es`
+}

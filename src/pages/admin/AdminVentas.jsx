@@ -143,7 +143,7 @@ export default function AdminVentas() {
                       {v.detalles?.map((d, i) => (
                         <div key={i} className={pStyles.detalleRow}>
                           <span>{d.nombreProducto ?? d.producto?.nombre}</span>
-                          {d.talle && <span className={pStyles.talle}>Talle {d.talle}</span>}
+                          {d.talle && <span className={pStyles.talle}>{d.talle}</span>}
                           <span>x{d.cantidad}</span>
                           <span>{formatPrice(d.subtotal)}</span>
                         </div>

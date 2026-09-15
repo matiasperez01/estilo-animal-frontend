@@ -1,5 +1,5 @@
 import { useCart } from '../store/CartContext'
-import { formatPrice } from '../store/products'
+import { formatPrice, varianteLabel } from '../store/products'
 import { useNavigate } from 'react-router-dom'
 import { IconX, IconShoppingBag, IconTrash, IconTruck, IconCheckCircle } from './icons/Icon'
 import styles from './CartPanel.module.css'
@@ -48,7 +48,7 @@ const navigate = useNavigate()
                 <div className={styles.itemInfo}>
                   <p className={styles.itemName}>{product.name}</p>
                   <p className={styles.itemMeta}>
-  {size ? `Talle ${size}` : ''}
+  {size ? `${varianteLabel(product.tipoVariante)} ${size}` : ''}
 </p>
                   <div className={styles.qtyRow}>
                     <button className={styles.qtyBtn} onClick={() => changeQty(product.id, size, -1)}>−</button>

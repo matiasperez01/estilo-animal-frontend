@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
-import { formatPrice } from '../store/products'
+import { formatPrice, varianteLabel } from '../store/products'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import {
@@ -50,6 +50,7 @@ useEffect(() => {
           price: selectedVariante ? Number(selectedVariante.precio) : Number(producto.precio),
           species: producto.especie,
           imagenUrl: producto.imagenUrl,
+          tipoVariante: producto.tipoVariante,
         },
         size: selectedVariante ? selectedVariante.talle : '',
       },
@@ -58,7 +59,7 @@ useEffect(() => {
   }
 
   function consultarWA() {
-    const talle = selectedVariante ? ` - Talle ${selectedVariante.talle}` : ''
+    const talle = selectedVariante ? ` - ${varianteLabel(producto.tipoVariante)} ${selectedVariante.talle}` : ''
     const precio = selectedVariante
       ? formatPrice(Number(selectedVariante.precio))
       : formatPrice(Number(producto.precio))
@@ -156,7 +157,7 @@ useEffect(() => {
           {/* STOCK */}
           <div className={styles.stockBadge}>
             {sinStock ? (
-              <span className={styles.sinStock}><IconX width={13} height={13} /> Sin stock en este talle</span>
+              <span className={styles.sinStock}><IconX width={13} height={13} /> Sin stock en este{' '}{varianteLabel(producto.tipoVariante).toLowerCase()}</span>
             ) : stockBajo ? (
               <span className={styles.stockBajo}><IconZap /> Últimas {stockMostrado} unidades</span>
             ) : (
@@ -169,11 +170,13 @@ useEffect(() => {
             <div className={styles.variantesBlock}>
               <div className={styles.variantesHeader}>
                 <p className={styles.variantesLabel}>
-                  Talle seleccionado: <strong>{selectedVariante?.talle ?? '—'}</strong>
+                  {varianteLabel(producto.tipoVariante)} seleccionado: <strong>{selectedVariante?.talle ?? '—'}</strong>
                 </p>
-                <a href="/guia-de-talles" className={styles.guiaLink} target="_blank" rel="noreferrer">
-                  <IconRuler width={13} height={13} /> Guía de talles
-                </a>
+                {varianteLabel(producto.tipoVariante) === 'Talle' && (
+                  <a href="/guia-de-talles" className={styles.guiaLink} target="_blank" rel="noreferrer">
+                    <IconRuler width={13} height={13} /> Guía de talles
+                  </a>
+                )}
               </div>
               <div className={styles.variantesGrid}>
                 {variantes.map(v => (
@@ -191,11 +194,17 @@ useEffect(() => {
                 ))}
               </div>
               <p className={styles.talleHint}>
-                ¿No sabés qué talle elegir?{' '}
-                <a href="/guia-de-talles" className={styles.guiaLink}>Consultá la guía de talles</a>
-                {' '}o{' '}
+                {varianteLabel(producto.tipoVariante) === 'Talle' ? (
+                  <>
+                    ¿No sabés qué talle elegir?{' '}
+                    <a href="/guia-de-talles" className={styles.guiaLink}>Consultá la guía de talles</a>
+                    {' '}o{' '}
+                  </>
+                ) : (
+                  `¿Tenés dudas sobre las opciones de ${varianteLabel(producto.tipoVariante).toLowerCase()}? `
+                )}
                 <a
-                  href={`https://wa.me/${WA}?text=Hola! Necesito ayuda para elegir el talle de: ${producto.nombre} 🐾`}
+                  href={`https://wa.me/${WA}?text=Hola! Necesito ayuda para elegir ${varianteLabel(producto.tipoVariante).toLowerCase()} de: ${producto.nombre} 🐾`}
                   target="_blank"
                   rel="noreferrer"
                   className={styles.guiaLink}

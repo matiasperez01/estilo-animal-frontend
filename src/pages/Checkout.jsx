@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCart } from '../store/CartContext'
-import { formatPrice } from '../store/products'
+import { formatPrice, varianteLabel } from '../store/products'
 import {
   IconStore, IconTruck, IconCreditCard, IconBanknote,
   IconWhatsApp, IconShoppingBag, IconCheckCircle,
@@ -25,7 +25,7 @@ function getZona(barrioId) {
 function buildWhatsAppMessage(items, subtotal, costoEnvio, total, form) {
   const lineas = items.map(
     ({ product, size, qty }) =>
-      `• ${product.name}${size ? ` (Talle ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}`
+      `• ${product.name}${size ? ` (${varianteLabel(product.tipoVariante)} ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}`
   )
 
   const zona = form.entrega === 'envio' ? getZona(form.barrio) : null
@@ -250,7 +250,7 @@ const envioGratis = subtotal >= ENVIO_GRATIS_DESDE && form.entrega === 'envio'
                 <div className={styles.summaryInfo}>
                   <p className={styles.summaryName}>{product.name}</p>
                   <p className={styles.summaryMeta}>
-                    {size ? `Talle ${size} · ` : ''}x{qty}
+                    {size ? `${varianteLabel(product.tipoVariante)} ${size} · ` : ''}x{qty}
                   </p>
                 </div>
                 <span className={styles.summaryPrice}>{formatPrice(product.price * qty)}</span>

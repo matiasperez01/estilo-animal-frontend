@@ -44,6 +44,7 @@ function adaptarProducto(p) {
     badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
     stock: p.stock ?? 0,
     variantes: p.variantes ?? [],
+    tipoVariante: p.tipoVariante ?? null,
   }
 }
 

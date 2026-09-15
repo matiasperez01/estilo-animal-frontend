@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { formatPrice } from '../store/products'
+import { formatPrice, varianteLabelPlural } from '../store/products'
 import { IconPaw, IconCat } from './icons/Icon'
 import styles from './ProductCard.module.css'
 
@@ -47,7 +47,7 @@ export default function ProductCard({ product }) {
 
         {tieneVariantes && (
           <p className={styles.tallesDisponibles}>
-            Talles: {product.variantes.filter(v => v.stock > 0).map(v => v.talle).join(', ') || 'Sin stock'}
+            {varianteLabelPlural(product.tipoVariante)}: {product.variantes.filter(v => v.stock > 0).map(v => v.talle).join(', ') || 'Sin stock'}
           </p>
         )}
 

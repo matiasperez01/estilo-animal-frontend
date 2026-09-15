@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { adminFetch } from '../../lib/adminAuth'
-import { formatPrice } from '../../store/products'
+import { formatPrice, varianteLabel } from '../../store/products'
 import tableStyles from './AdminTable.module.css'
 import styles from './ProductLineItems.module.css'
 
@@ -142,7 +142,7 @@ export default function ProductLineItems({
               onChange={e => elegirTalle(e.target.value)}
               className={styles.stagedSelect}
             >
-              <option value="" disabled>Talle</option>
+              <option value="" disabled>{varianteLabel(staged.producto.tipoVariante)}</option>
               {staged.producto.variantes.map(v => (
                 <option key={v.id} value={v.talle}>{v.talle}</option>
               ))}
@@ -178,7 +178,7 @@ export default function ProductLineItems({
           <thead>
             <tr>
               <th>Producto</th>
-              <th>Talle</th>
+              <th>Opción</th>
               <th>Cant.</th>
               <th>{priceLabel}</th>
               <th>Subtotal</th>

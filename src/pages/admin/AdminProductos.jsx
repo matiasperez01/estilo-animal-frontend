@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { adminFetch } from '../../lib/adminAuth'
+import { TIPOS_VARIANTE, varianteLabel, varianteLabelPlural } from '../../store/products'
 import styles from './AdminTable.module.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -8,6 +9,14 @@ const EMPTY_FORM = {
   nombre: '', descripcion: '', precio: '', stock: '',
   stockMinimo: '', codigoBarra: '', especie: 'perro',
   categoriaId: '', proveedorId: '', imagenUrl: '', destacado: false,
+  tipoVariante: '',
+}
+
+const EJEMPLOS_VARIANTE = {
+  Talle: 'ej: 2, XS, M',
+  Color: 'ej: Rojo, Azul',
+  Sabor: 'ej: Pollo, Carne',
+  'Tamaño': 'ej: Chico, Grande',
 }
 
 export default function AdminProductos() {
@@ -23,6 +32,7 @@ export default function AdminProductos() {
   const [variantes, setVariantes] = useState([])
   const [varianteForm, setVarianteForm] = useState({ talle: '', precio: '', stock: '' })
   const [imagenes, setImagenes] = useState([])
+  const [tipoPersonalizado, setTipoPersonalizado] = useState(false)
 
   useEffect(() => {
     cargarDatos() 
@@ -42,6 +52,7 @@ export default function AdminProductos() {
   function abrirNuevo() {
     setForm(EMPTY_FORM)
     setEditando(null)
+    setTipoPersonalizado(false)
     setShowForm(true)
   }
 
@@ -58,7 +69,9 @@ async function abrirEditar(p) {
     proveedorId: p.proveedor?.id ?? '',
     imagenUrl: p.imagenUrl ?? '',
     destacado: p.destacado ?? false,
+    tipoVariante: p.tipoVariante ?? '',
   })
+  setTipoPersonalizado(!!p.tipoVariante && !TIPOS_VARIANTE.includes(p.tipoVariante))
   setPreview(p.imagenUrl ?? null)
   setEditando(p.id)
   setImagenes(p.imagenes ?? [])
@@ -71,6 +84,7 @@ function cerrarForm() {
   setShowForm(false)
   setEditando(null)
   setForm(EMPTY_FORM)
+  setTipoPersonalizado(false)
   setPreview(null)
   setVariantes([])
   setVarianteForm({ talle: '', precio: '', stock: '' })
@@ -133,6 +147,7 @@ const body = {
   categoria: form.categoriaId ? { id: Number(form.categoriaId) } : null,
   proveedor: form.proveedorId ? { id: Number(form.proveedorId) } : null,
   destacado: form.destacado,
+  tipoVariante: form.tipoVariante || null,
 }
 
     const url = editando ? `${API}/api/productos/${editando}` : `${API}/api/productos`
@@ -171,7 +186,7 @@ const body = {
   if (!varianteForm.talle || !varianteForm.precio || !varianteForm.stock) return
   if (!editando) {
     // Si es producto nuevo, guardarlo primero
-    alert('Guardá el producto primero, luego agregá los talles.')
+    alert(`Guardá el producto primero, luego agregá las opciones de ${varianteLabel(form.tipoVariante).toLowerCase()}.`)
     return
   }
   await adminFetch(`${API}/api/productos/${editando}/variantes`, {
@@ -302,15 +317,45 @@ async function eliminarVariante(varianteId) {
   <span>Mostrar en destacados de la página principal</span>
 </label>
               </div>
+              <div className={styles.row2}>
+                <label className={styles.field}>
+                  <span>Tipo de opción</span>
+                  <select
+                    value={tipoPersonalizado ? 'personalizado' : (form.tipoVariante || 'Talle')}
+                    onChange={e => {
+                      if (e.target.value === 'personalizado') {
+                        setTipoPersonalizado(true)
+                        setForm(prev => ({ ...prev, tipoVariante: '' }))
+                      } else {
+                        setTipoPersonalizado(false)
+                        setForm(prev => ({ ...prev, tipoVariante: e.target.value }))
+                      }
+                    }}
+                  >
+                    {TIPOS_VARIANTE.map(t => <option key={t} value={t}>{t}</option>)}
+                    <option value="personalizado">Personalizado...</option>
+                  </select>
+                </label>
+                {tipoPersonalizado && (
+                  <label className={styles.field}>
+                    <span>Nombre de la opción</span>
+                    <input
+                      value={form.tipoVariante}
+                      onChange={e => setForm(prev => ({ ...prev, tipoVariante: e.target.value }))}
+                      placeholder="ej: Aroma, Material"
+                    />
+                  </label>
+                )}
+              </div>
               {editando && (
   <section className={styles.section}>
-    <h3 className={styles.sectionTitle}>Talles y precios</h3>
+    <h3 className={styles.sectionTitle}>{varianteLabelPlural(form.tipoVariante)} y precios</h3>
 
 {variantes.length > 0 && (
   <table className={styles.variantesTable}>
     <thead>
       <tr>
-        <th>Talle</th>
+        <th>{varianteLabel(form.tipoVariante)}</th>
         <th>Precio</th>
         <th>Stock</th>
         <th></th>
@@ -353,11 +398,11 @@ async function eliminarVariante(varianteId) {
 
     <div className={styles.row3}>
       <label className={styles.field}>
-        <span>Talle</span>
+        <span>{varianteLabel(form.tipoVariante)}</span>
         <input
           value={varianteForm.talle}
           onChange={e => setVarianteForm(p => ({ ...p, talle: e.target.value }))}
-          placeholder="ej: 2, XS, M"
+          placeholder={EJEMPLOS_VARIANTE[varianteLabel(form.tipoVariante)] || 'Escribí una opción'}
         />
       </label>
       <label className={styles.field}>
@@ -380,7 +425,7 @@ async function eliminarVariante(varianteId) {
       </label>
     </div>
     <button type="button" className={styles.btnSecondary} onClick={agregarVariante}>
-      + Agregar talle
+      + Agregar {varianteLabel(form.tipoVariante).toLowerCase()}
     </button>
   </section>
 )}
