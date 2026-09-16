@@ -93,7 +93,7 @@ export default function AdminProveedores() {
       proveedor: { id: Number(form.proveedorId) },
       nota: form.nota || null,
       detalles: items.map(i => ({
-        producto: { id: i.productoId },
+        productoId: i.productoId || null,
         nombreProducto: i.nombre,
         talle: i.talle,
         cantidad: i.cantidad,
@@ -101,15 +101,25 @@ export default function AdminProveedores() {
       })),
     }
 
-    await adminFetch(`${API}/api/pedidos-proveedor`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+    try {
+      const res = await adminFetch(`${API}/api/pedidos-proveedor`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
 
-    setGuardando(false)
-    cerrar()
-    cargarDatos()
+      if (!res.ok) {
+        const detalle = await res.text().catch(() => '')
+        throw new Error(`El servidor respondió ${res.status}${detalle ? `: ${detalle}` : ''}`)
+      }
+
+      setGuardando(false)
+      cerrar()
+      cargarDatos()
+    } catch (err) {
+      setGuardando(false)
+      alert(`No se pudo guardar el pedido. Probá de nuevo.\n\n${err.message}`)
+    }
   }
 
   async function cambiarEstado(id, estado) {

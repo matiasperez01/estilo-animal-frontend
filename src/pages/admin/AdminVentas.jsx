@@ -77,7 +77,7 @@ export default function AdminVentas() {
       medioPago: form.medioPago,
       costoEnvio,
       detalles: items.map(i => ({
-        producto: { id: i.productoId },
+        productoId: i.productoId || null,
         nombreProducto: i.nombre,
         talle: i.talle,
         cantidad: i.cantidad,
@@ -85,15 +85,25 @@ export default function AdminVentas() {
       })),
     }
 
-    await adminFetch(`${API}/api/ventas/manual`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+    try {
+      const res = await adminFetch(`${API}/api/ventas/manual`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
 
-    setGuardando(false)
-    cerrar()
-    cargarDatos()
+      if (!res.ok) {
+        const detalle = await res.text().catch(() => '')
+        throw new Error(`El servidor respondió ${res.status}${detalle ? `: ${detalle}` : ''}`)
+      }
+
+      setGuardando(false)
+      cerrar()
+      cargarDatos()
+    } catch (err) {
+      setGuardando(false)
+      alert(`No se pudo guardar la venta. Probá de nuevo.\n\n${err.message}`)
+    }
   }
 
   async function eliminar(id) {
