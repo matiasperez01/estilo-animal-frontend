@@ -146,7 +146,7 @@ useEffect(() => {
   const proximamente = !!producto.proximamente
   const stockMostrado = selectedVariante ? selectedVariante.stock : producto.stock
   const sinStock = stockMostrado === 0 && !proximamente
-  const stockBajo = stockMostrado > 0 && stockMostrado <= 3
+  const stockBajo = stockMostrado === 1
 
   return (
     <main className={styles.page}>
@@ -218,7 +218,7 @@ useEffect(() => {
             ) : sinStock ? (
               <span className={styles.sinStock}><IconX width={13} height={13} /> Sin stock en este{' '}{varianteLabel(producto.tipoVariante).toLowerCase()}</span>
             ) : stockBajo ? (
-              <span className={styles.stockBajo}><IconZap /> Últimas {stockMostrado} unidades</span>
+              <span className={styles.stockBajo}><IconZap /> Última unidad</span>
             ) : (
               <span className={styles.enStock}><IconCheck width={13} height={13} /> En stock</span>
             )}
