@@ -6,7 +6,7 @@ import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import {
   IconTruck, IconStore, IconCreditCard, IconWhatsApp,
-  IconRuler, IconStar, IconPaw, IconCat, IconToy, IconTag, IconBall,
+  IconRuler, IconStar, IconPaw, IconCat,
 } from '../components/icons/Icon'
 import styles from './Home.module.css'
 
@@ -125,25 +125,13 @@ export default function Home() {
 <section className={styles.cats}>
   <h2 className={styles.sectionTitle}>¿Qué estás buscando?</h2>
   <div className={styles.catsGrid}>
-    <Link to="/tienda?especie=perro" className={styles.catCard}>
-      <IconPaw className={styles.catIcon} width={24} height={24} />
+    <Link to="/tienda?especie=perro" className={`${styles.catCard} ${styles.catCardDog}`}>
+      <IconPaw className={styles.catIcon} width={48} height={48} />
       <span>Perros</span>
     </Link>
-    <Link to="/tienda?especie=gato" className={styles.catCard}>
-      <IconCat className={styles.catIcon} width={26} height={26} />
+    <Link to="/tienda?especie=gato" className={`${styles.catCard} ${styles.catCardCat}`}>
+      <IconCat className={styles.catIcon} width={52} height={52} />
       <span>Gatos</span>
-    </Link>
-    <Link to="/tienda" className={styles.catCard}>
-      <IconToy className={styles.catIcon} width={26} height={26} />
-      <span>Juguetes</span>
-    </Link>
-    <Link to="/tienda" className={styles.catCard}>
-      <IconTag className={styles.catIcon} width={26} height={26} />
-      <span>Accesorios</span>
-    </Link>
-    <Link to="/tienda" className={styles.catCard}>
-      <IconBall className={styles.catIcon} width={26} height={26} />
-      <span>Mundial 2026</span>
     </Link>
   </div>
 </section>
