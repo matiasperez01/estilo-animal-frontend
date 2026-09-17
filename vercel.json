@@ -1,5 +1,16 @@
 {
   "rewrites": [
+    {
+      "source": "/producto/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|WhatsApp|TelegramBot|LinkedInBot|Slackbot|Discordbot|SkypeUriPreview|Pinterest|vkShare|redditbot|Applebot|Google-InspectionTool|Googlebot|W3C_Validator|Iframely|Embedly).*"
+        }
+      ],
+      "destination": "/api/producto-preview?id=:id"
+    },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ]
 }
