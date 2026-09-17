@@ -17,7 +17,7 @@ export default function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const { dispatch } = useCart()
+  const { state: cartState, dispatch } = useCart()
   const { toast, showToast } = useToast()
 const [imagenActiva, setImagenActiva] = useState(0)
   const [producto, setProducto]               = useState(null)
@@ -42,6 +42,15 @@ useEffect(() => {
 }, [id])
 
   function addToCart() {
+    const stockDisponible = selectedVariante ? selectedVariante.stock : producto.stock
+    const size = selectedVariante ? selectedVariante.talle : ''
+    const yaEnCarrito = cartState.items.find(i => i.product.id === producto.id && i.size === size)
+
+    if (yaEnCarrito && yaEnCarrito.qty >= stockDisponible) {
+      showToast(`Ya tenés en el carrito todo el stock disponible (${stockDisponible})`)
+      return
+    }
+
     dispatch({
       type: 'ADD_ITEM',
       payload: {
@@ -52,8 +61,9 @@ useEffect(() => {
           species: producto.especie,
           imagenUrl: producto.imagenUrl,
           tipoVariante: producto.tipoVariante,
+          stock: stockDisponible,
         },
-        size: selectedVariante ? selectedVariante.talle : '',
+        size,
       },
     })
     showToast(`${producto.nombre} agregado al carrito`)

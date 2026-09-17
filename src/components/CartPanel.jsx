@@ -1,17 +1,24 @@
 import { useCart } from '../store/CartContext'
 import { formatPrice, varianteLabel } from '../store/products'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../hooks/useToast'
 import { IconX, IconShoppingBag, IconTrash, IconTruck, IconCheckCircle } from './icons/Icon'
+import Toast from './Toast'
 import styles from './CartPanel.module.css'
 
 export default function CartPanel() {
   const { state, dispatch, subtotal } = useCart()
   const { items, isOpen } = state
 const navigate = useNavigate()
+  const { toast, showToast } = useToast()
   function close() { dispatch({ type: 'CLOSE_CART' }) }
 
-  function changeQty(productId, size, delta) {
-    dispatch({ type: 'CHANGE_QTY', payload: { productId, size, delta } })
+  function changeQty(item, delta) {
+    if (delta > 0 && item.qty >= (item.product.stock ?? Infinity)) {
+      showToast(`Solo hay ${item.product.stock} unidades disponibles`)
+      return
+    }
+    dispatch({ type: 'CHANGE_QTY', payload: { productId: item.product.id, size: item.size, delta } })
   }
 
   function remove(productId, size) {
@@ -51,9 +58,9 @@ const navigate = useNavigate()
   {size ? `${varianteLabel(product.tipoVariante)} ${size}` : ''}
 </p>
                   <div className={styles.qtyRow}>
-                    <button className={styles.qtyBtn} onClick={() => changeQty(product.id, size, -1)}>−</button>
+                    <button className={styles.qtyBtn} onClick={() => changeQty({ product, size, qty }, -1)}>−</button>
                     <span className={styles.qty}>{qty}</span>
-                    <button className={styles.qtyBtn} onClick={() => changeQty(product.id, size, +1)}>+</button>
+                    <button className={styles.qtyBtn} onClick={() => changeQty({ product, size, qty }, +1)}>+</button>
                   </div>
                 </div>
                 <div className={styles.itemRight}>
@@ -108,6 +115,8 @@ const navigate = useNavigate()
           </div>
         )}
       </aside>
+
+      <Toast message={toast} />
     </>
   )
 }

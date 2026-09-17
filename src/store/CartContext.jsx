@@ -15,6 +15,8 @@ function cartReducer(state, action) {
         i => i.product.id === product.id && i.size === size
       )
       if (existing) {
+        const tope = product.stock ?? Infinity
+        if (existing.qty >= tope) return state
         return {
           ...state,
           items: state.items.map(i =>
@@ -38,11 +40,11 @@ function cartReducer(state, action) {
     case 'CHANGE_QTY': {
       const { productId, size, delta } = action.payload
       const updated = state.items
-        .map(i =>
-          i.product.id === productId && i.size === size
-            ? { ...i, qty: i.qty + delta }
-            : i
-        )
+        .map(i => {
+          if (i.product.id !== productId || i.size !== size) return i
+          const tope = i.product.stock ?? Infinity
+          return { ...i, qty: Math.min(i.qty + delta, tope) }
+        })
         .filter(i => i.qty > 0)
       return { ...state, items: updated }
     }
