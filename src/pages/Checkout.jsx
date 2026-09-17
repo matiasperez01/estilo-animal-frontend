@@ -25,7 +25,7 @@ function getZona(barrioId) {
 function buildWhatsAppMessage(items, subtotal, costoEnvio, total, form) {
   const lineas = items.map(
     ({ product, size, qty }) =>
-      `• ${product.name}${size ? ` (${varianteLabel(product.tipoVariante)} ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}`
+      `• ${product.name}${size ? ` (${varianteLabel(product.tipoVariante)} ${size})` : ''} x${qty} — ${formatPrice(product.price * qty)}${product.reserva ? ' [RESERVA - próximamente]' : ''}`
   )
 
   const zona = form.entrega === 'envio' ? getZona(form.barrio) : null

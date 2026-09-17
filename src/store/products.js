@@ -39,6 +39,7 @@ export function adaptarProducto(p) {
     stock: p.stock ?? 0,
     variantes: p.variantes ?? [],
     tipoVariante: p.tipoVariante ?? null,
+    proximamente: p.proximamente ?? false,
   }
 }
 

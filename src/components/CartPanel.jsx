@@ -53,7 +53,10 @@ const navigate = useNavigate()
                     : <IconShoppingBag width={20} height={20} />}
                 </div>
                 <div className={styles.itemInfo}>
-                  <p className={styles.itemName}>{product.name}</p>
+                  <div className={styles.itemNameRow}>
+                    <p className={styles.itemName}>{product.name}</p>
+                    {product.reserva && <span className={styles.reservaTag}>Reserva</span>}
+                  </div>
                   <p className={styles.itemMeta}>
   {size ? `${varianteLabel(product.tipoVariante)} ${size}` : ''}
 </p>

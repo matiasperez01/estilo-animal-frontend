@@ -37,7 +37,9 @@ useEffect(() => {
     setProducto(p)
     setVariantes(v)
     setImagenActiva(0)
-    const disponible = v.find(x => x.stock > 0)
+    // Si es "próximamente" no hay stock real todavía: se puede elegir
+    // cualquier opción igual, ya que es una reserva.
+    const disponible = p.proximamente ? v[0] : v.find(x => x.stock > 0)
     if (disponible) setSelectedVariante(disponible)
     setLoading(false)
   }
@@ -45,11 +47,16 @@ useEffect(() => {
 }, [id])
 
   function addToCart() {
-    const stockDisponible = selectedVariante ? selectedVariante.stock : producto.stock
     const size = selectedVariante ? selectedVariante.talle : ''
     const yaEnCarrito = cartState.items.find(i => i.product.id === producto.id && i.size === size)
 
-    if (yaEnCarrito && yaEnCarrito.qty >= stockDisponible) {
+    // Un producto "próximamente" todavía no tiene stock real: se reserva sin
+    // tope, en vez de limitarlo al stock (que está en 0 hasta que llegue).
+    const stockDisponible = producto.proximamente
+      ? null
+      : selectedVariante ? selectedVariante.stock : producto.stock
+
+    if (!producto.proximamente && yaEnCarrito && yaEnCarrito.qty >= stockDisponible) {
       showToast(`Ya tenés en el carrito todo el stock disponible (${stockDisponible})`)
       return
     }
@@ -73,11 +80,12 @@ useEffect(() => {
           imagenUrl: producto.imagenUrl,
           tipoVariante: producto.tipoVariante,
           stock: stockDisponible,
+          reserva: producto.proximamente,
         },
         size,
       },
     })
-    showToast(`${producto.nombre} agregado al carrito`)
+    showToast(producto.proximamente ? `${producto.nombre} reservado` : `${producto.nombre} agregado al carrito`)
   }
 
   function volver() {
@@ -135,8 +143,9 @@ useEffect(() => {
       ? Number(producto.precioDescuento)
       : Number(producto.precio)
 
+  const proximamente = !!producto.proximamente
   const stockMostrado = selectedVariante ? selectedVariante.stock : producto.stock
-  const sinStock = stockMostrado === 0
+  const sinStock = stockMostrado === 0 && !proximamente
   const stockBajo = stockMostrado > 0 && stockMostrado <= 3
 
   return (
@@ -204,7 +213,9 @@ useEffect(() => {
 
           {/* STOCK */}
           <div className={styles.stockBadge}>
-            {sinStock ? (
+            {proximamente ? (
+              <span className={styles.proximamenteBadge}><IconTruck width={13} height={13} /> Próximamente</span>
+            ) : sinStock ? (
               <span className={styles.sinStock}><IconX width={13} height={13} /> Sin stock en este{' '}{varianteLabel(producto.tipoVariante).toLowerCase()}</span>
             ) : stockBajo ? (
               <span className={styles.stockBajo}><IconZap /> Últimas {stockMostrado} unidades</span>
@@ -230,14 +241,14 @@ useEffect(() => {
                 {variantes.map(v => (
                   <button
                     key={v.id}
-                    className={`${styles.varianteBtn} ${selectedVariante?.id === v.id ? styles.varianteBtnActive : ''} ${v.stock === 0 ? styles.varianteBtnSinStock : ''}`}
-                    onClick={() => v.stock > 0 && setSelectedVariante(v)}
-                    disabled={v.stock === 0}
-                    title={v.stock === 0 ? 'Sin stock' : `${v.stock} disponibles`}
+                    className={`${styles.varianteBtn} ${selectedVariante?.id === v.id ? styles.varianteBtnActive : ''} ${v.stock === 0 && !proximamente ? styles.varianteBtnSinStock : ''}`}
+                    onClick={() => (v.stock > 0 || proximamente) && setSelectedVariante(v)}
+                    disabled={v.stock === 0 && !proximamente}
+                    title={proximamente ? 'Próximamente' : v.stock === 0 ? 'Sin stock' : `${v.stock} disponibles`}
                   >
                     <span className={styles.varianteTalle}>{v.talle}</span>
                     <span className={styles.variantePrecio}>{formatPrice(Number(v.precio))}</span>
-                    {v.stock === 0 && <span className={styles.varianteAgotado}>Agotado</span>}
+                    {v.stock === 0 && !proximamente && <span className={styles.varianteAgotado}>Agotado</span>}
                   </button>
                 ))}
               </div>
@@ -270,7 +281,7 @@ useEffect(() => {
               onClick={addToCart}
               disabled={sinStock || (variantes.length > 0 && !selectedVariante)}
             >
-              <IconShoppingBag width={18} height={18} /> Agregar al carrito
+              <IconShoppingBag width={18} height={18} /> {proximamente ? 'Reservar' : 'Agregar al carrito'}
             </button>
             <button className={styles.waBtn} onClick={consultarWA}>
               <IconWhatsApp /> Consultar por WhatsApp

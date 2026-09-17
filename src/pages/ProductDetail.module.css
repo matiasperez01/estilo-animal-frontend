@@ -148,6 +148,7 @@
 .enStock  { color: var(--color-pine); }
 .stockBajo { color: var(--color-accent); }
 .sinStock { color: #C44A1A; }
+.proximamenteBadge { color: var(--color-pine); }
 
 /* VARIANTES */
 .variantesBlock {

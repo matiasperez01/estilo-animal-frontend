@@ -117,14 +117,36 @@
   min-width: 0;
 }
 
+.itemNameRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin-bottom: 3px;
+}
+
 .itemName {
   font-size: 13px;
   font-weight: 600;
   color: var(--color-text);
-  margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.reservaTag {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--color-pine-light);
+  color: var(--color-pine);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
 }
 
 .itemMeta {

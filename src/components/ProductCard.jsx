@@ -13,6 +13,7 @@ export default function ProductCard({ product }) {
 
   const tieneVariantes = product.variantes?.length > 0
   const sinStock = product.stock === 0 && product.variantes?.every(v => v.stock === 0)
+  const proximamente = !!product.proximamente
 
   // El descuento es un precio único cargado en el producto, así que solo
   // tiene sentido mostrarlo cuando no hay variantes (cada una con su propio precio).
@@ -39,7 +40,9 @@ export default function ProductCard({ product }) {
           {product.badge}
         </span>
         {enOferta && <span className={styles.badgeOferta}>Oferta</span>}
-        {sinStock && (
+        {proximamente ? (
+          <div className={styles.proximamenteOverlay}>Próximamente</div>
+        ) : sinStock && (
           <div className={styles.sinStockOverlay}>Sin stock</div>
         )}
       </div>
@@ -52,7 +55,9 @@ export default function ProductCard({ product }) {
 
         {tieneVariantes && (
           <p className={styles.tallesDisponibles}>
-            {varianteLabelPlural(product.tipoVariante)}: {product.variantes.filter(v => v.stock > 0).map(v => v.talle).join(', ') || 'Sin stock'}
+            {varianteLabelPlural(product.tipoVariante)}: {proximamente
+              ? product.variantes.map(v => v.talle).join(', ')
+              : product.variantes.filter(v => v.stock > 0).map(v => v.talle).join(', ') || 'Sin stock'}
           </p>
         )}
 
@@ -71,11 +76,11 @@ export default function ProductCard({ product }) {
             )}
           </div>
           <button
-            className={`${styles.addBtn} ${sinStock ? styles.addBtnDisabled : ''}`}
+            className={`${styles.addBtn} ${sinStock && !proximamente ? styles.addBtnDisabled : ''}`}
             onClick={e => { e.stopPropagation(); navigate(`/producto/${product.id}`) }}
             aria-label={`Ver ${product.name}`}
           >
-            {sinStock ? 'Sin stock' : 'Ver producto'}
+            {proximamente ? 'Reservar' : sinStock ? 'Sin stock' : 'Ver producto'}
           </button>
         </div>
       </div>
