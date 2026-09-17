@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useProductos } from '../hooks/useProductos'
+import { adaptarProducto, precioEfectivo } from '../store/products'
 import ProductCard from '../components/ProductCard'
 import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import Toast from '../components/Toast'
@@ -36,25 +37,6 @@ function filtrarProductos(productos, especie, categoria) {
   return resultado
 }
 
-function adaptarProducto(p) {
-  return {
-    id: p.id,
-    name: p.nombre,
-    description: p.descripcion,
-    species: p.especie?.toLowerCase() ?? 'perro',
-    category: p.categoria?.nombre?.toLowerCase() ?? '',
-    price: Number(p.precio) || 0,
-    precioDescuento: p.precioDescuento ? Number(p.precioDescuento) : null,
-    sizes: [],
-    image: p.imagenUrl ?? null,
-    imagenes: p.imagenes ?? [],
-    badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
-    stock: p.stock ?? 0,
-    variantes: p.variantes ?? [],
-    tipoVariante: p.tipoVariante ?? null,
-  }
-}
-
 export default function Catalog() {
   const [searchParams, setSearchParams] = useSearchParams()
   const especieUrl = searchParams.get('especie') ?? 'todos'
@@ -62,6 +44,9 @@ export default function Catalog() {
   const [activeFilter, setActiveFilter] = useState(especieUrl)
   const [activeCategory, setActiveCategory] = useState(categoriaUrl)
   const [search, setSearch] = useState('')
+  const [orden, setOrden] = useState('relevancia')
+  const [precioMin, setPrecioMin] = useState('')
+  const [precioMax, setPrecioMax] = useState('')
   const { productos, loading, error } = useProductos()
   const { toast, showToast } = useToast()
 
@@ -95,7 +80,23 @@ export default function Catalog() {
   const filtradoBusqueda = busqueda
     ? filteredPorCategoria.filter(p => p.name.toLowerCase().includes(busqueda))
     : filteredPorCategoria
-  const filtered = [...filtradoBusqueda].sort((a, b) => estaSinStock(a) - estaSinStock(b))
+
+  const min = precioMin !== '' ? Number(precioMin) : null
+  const max = precioMax !== '' ? Number(precioMax) : null
+  const filtradoPrecio = filtradoBusqueda.filter(p => {
+    const precio = precioEfectivo(p)
+    if (min !== null && precio < min) return false
+    if (max !== null && precio > max) return false
+    return true
+  })
+
+  const ordenado = orden === 'relevancia'
+    ? filtradoPrecio
+    : [...filtradoPrecio].sort((a, b) =>
+        orden === 'menor' ? precioEfectivo(a) - precioEfectivo(b) : precioEfectivo(b) - precioEfectivo(a)
+      )
+
+  const filtered = [...ordenado].sort((a, b) => estaSinStock(a) - estaSinStock(b))
 
   return (
     <main className={styles.page}>
@@ -168,7 +169,43 @@ export default function Catalog() {
         {error && <p className={styles.estadoError}>No se pudo conectar con el servidor.</p>}
         {!loading && !error && (
           <>
-            <p className={styles.count}>{filtered.length} productos</p>
+            <div className={styles.toolbar}>
+              <p className={styles.count}>{filtered.length} productos</p>
+              <div className={styles.toolbarControls}>
+                <div className={styles.priceFilter}>
+                  <span>Precio:</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={precioMin}
+                    onChange={e => setPrecioMin(e.target.value)}
+                    placeholder="Mín"
+                    className={styles.priceInput}
+                    aria-label="Precio mínimo"
+                  />
+                  <span>-</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={precioMax}
+                    onChange={e => setPrecioMax(e.target.value)}
+                    placeholder="Máx"
+                    className={styles.priceInput}
+                    aria-label="Precio máximo"
+                  />
+                </div>
+                <select
+                  value={orden}
+                  onChange={e => setOrden(e.target.value)}
+                  className={styles.sortSelect}
+                  aria-label="Ordenar por"
+                >
+                  <option value="relevancia">Relevancia</option>
+                  <option value="menor">Menor precio</option>
+                  <option value="mayor">Mayor precio</option>
+                </select>
+              </div>
+            </div>
             {filtered.length === 0 ? (
               <p className={styles.estado}>
                 No encontramos productos {busqueda ? `para "${search}"` : 'con estos filtros'}.

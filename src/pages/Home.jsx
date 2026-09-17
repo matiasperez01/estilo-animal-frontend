@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useProductosDestacados } from '../hooks/useProductos'
+import { adaptarProducto } from '../store/products'
 import ProductCard from '../components/ProductCard'
 import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import Toast from '../components/Toast'
@@ -30,24 +31,6 @@ const TESTIMONIOS = [
     texto: 'No pensé que iba a encontrar ropa tan linda para gatos. Benji lo tolera perfectamente, muy cómoda y de excelente calidad.',
   },
 ]
-
-function adaptarProducto(p) {
-  return {
-    id: p.id,
-    name: p.nombre,
-    description: p.descripcion,
-    species: p.especie?.toLowerCase() ?? 'perro',
-    category: p.categoria?.nombre?.toLowerCase() ?? '',
-    price: Number(p.precio) || 0,
-    precioDescuento: p.precioDescuento ? Number(p.precioDescuento) : null,
-    sizes: [],
-    image: p.imagenUrl ?? null,
-    badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',
-    stock: p.stock ?? 0,
-    variantes: p.variantes ?? [],
-    tipoVariante: p.tipoVariante ?? null,
-  }
-}
 
 const WA = import.meta.env.VITE_WHATSAPP_NUMBER
 

@@ -25,6 +25,26 @@
 }
 .back:hover { color: var(--color-accent); }
 
+.relacionados {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--color-border);
+}
+
+.relacionadosTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 20px;
+  font-family: var(--font-display);
+}
+
+.relacionadosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

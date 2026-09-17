@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
-import { formatPrice, varianteLabel } from '../store/products'
+import { formatPrice, varianteLabel, adaptarProducto } from '../store/products'
+import { useProductos } from '../hooks/useProductos'
+import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import {
@@ -24,6 +26,7 @@ const [imagenActiva, setImagenActiva] = useState(0)
   const [variantes, setVariantes]             = useState([])
   const [selectedVariante, setSelectedVariante] = useState(null)
   const [loading, setLoading]                 = useState(true)
+  const { productos: todosLosProductos } = useProductos()
 
 useEffect(() => {
   async function cargar() {
@@ -114,6 +117,13 @@ useEffect(() => {
     )
   }
   if (!producto) return <div className={styles.loading}>Producto no encontrado</div>
+
+  // Relacionados: primero productos de la misma categoría, y si faltan para
+  // completar, se suman de la misma especie. Nunca el producto actual.
+  const otros = todosLosProductos.filter(p => p.id !== producto.id)
+  const mismaCategoria = otros.filter(p => producto.categoria?.id && p.categoria?.id === producto.categoria.id)
+  const mismaEspecie = otros.filter(p => p.especie === producto.especie && !mismaCategoria.includes(p))
+  const relacionados = [...mismaCategoria, ...mismaEspecie].slice(0, 4).map(adaptarProducto)
 
   // El descuento es un precio único cargado en el producto: solo aplica
   // cuando no hay variantes (cada una tiene su propio precio).
@@ -285,6 +295,21 @@ useEffect(() => {
 
         </div>
       </div>
+
+      {relacionados.length > 0 && (
+        <section className={styles.relacionados}>
+          <h2 className={styles.relacionadosTitle}>También te puede interesar</h2>
+          <div className={styles.relacionadosGrid}>
+            {relacionados.map(p => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                onAdded={(name) => showToast(`${name} agregado al carrito`)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       <Toast message={toast} />
     </main>

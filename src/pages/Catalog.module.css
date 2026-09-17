@@ -160,8 +160,57 @@
 .count {
   font-size: 13px;
   color: var(--color-text-muted);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 20px;
 }
+
+.toolbarControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.priceFilter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.priceInput {
+  width: 92px;
+  padding: 7px 10px;
+  border: 1.5px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+}
+.priceInput:focus { border-color: var(--color-accent); }
+
+.sortSelect {
+  padding: 7px 10px;
+  border: 1.5px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+  cursor: pointer;
+}
+.sortSelect:focus { border-color: var(--color-accent); }
 
 .grid {
   display: grid;
@@ -208,6 +257,12 @@
   .subfilterBtn { padding: 7px 14px; font-size: 13px; }
 
   .catalogArea { padding: 20px; }
+
+  .toolbar { align-items: stretch; }
+  .toolbarControls { width: 100%; }
+  .priceFilter { flex: 1; }
+  .priceInput { width: 100%; min-width: 0; }
+  .sortSelect { flex-shrink: 0; }
 
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
