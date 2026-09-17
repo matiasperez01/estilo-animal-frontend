@@ -6,7 +6,7 @@ import styles from './AdminTable.module.css'
 const API = import.meta.env.VITE_API_URL
 
 const EMPTY_FORM = {
-  nombre: '', descripcion: '', precio: '', stock: '',
+  nombre: '', descripcion: '', precio: '', precioDescuento: '', stock: '',
   stockMinimo: '', codigoBarra: '', especie: 'perro',
   categoriaId: '', proveedorId: '', imagenUrl: '', destacado: false,
   tipoVariante: '',
@@ -62,6 +62,7 @@ async function abrirEditar(p) {
     nombre: p.nombre ?? '',
     descripcion: p.descripcion ?? '',
     precio: p.precio ?? '',
+    precioDescuento: p.precioDescuento ?? '',
     stock: p.stock ?? '',
     stockMinimo: p.stockMinimo ?? '',
     codigoBarra: p.codigoBarra ?? '',
@@ -140,6 +141,7 @@ const body = {
   nombre: form.nombre,
   descripcion: form.descripcion,
   precio: Number(form.precio),
+  precioDescuento: form.precioDescuento ? Number(form.precioDescuento) : null,
   stock: Number(form.stock),
   stockMinimo: Number(form.stockMinimo) || 1,
   codigoBarra: form.codigoBarra || null,
@@ -255,7 +257,16 @@ async function eliminarVariante(varianteId) {
                 <td>{p.nombre}</td>
                 <td>{p.categoria?.nombre ?? '—'}</td>
                 <td className={styles.capitalize}>{p.especie ?? '—'}</td>
-                <td>${Number(p.precio).toLocaleString('es-AR')}</td>
+                <td>
+                  {p.precioDescuento && Number(p.precioDescuento) < Number(p.precio) ? (
+                    <>
+                      <span className={styles.precioTachado}>${Number(p.precio).toLocaleString('es-AR')}</span>{' '}
+                      <span className={styles.precioOferta}>${Number(p.precioDescuento).toLocaleString('es-AR')}</span>
+                    </>
+                  ) : (
+                    `$${Number(p.precio).toLocaleString('es-AR')}`
+                  )}
+                </td>
                 <td>
                   <span className={p.stock <= (p.stockMinimo ?? 1) ? styles.badgeLow : styles.badgeOk}>
                     {p.stock}
@@ -310,6 +321,19 @@ async function eliminarVariante(varianteId) {
                 <label className={styles.field}>
                   <span>Stock mínimo</span>
                   <input name="stockMinimo" type="number" value={form.stockMinimo} onChange={handleChange} min="0" />
+                </label>
+              </div>
+              <div className={styles.row2}>
+                <label className={styles.field}>
+                  <span>Precio de oferta (opcional)</span>
+                  <input
+                    name="precioDescuento"
+                    type="number"
+                    value={form.precioDescuento}
+                    onChange={handleChange}
+                    min="0"
+                    placeholder="Dejalo vacío si no está en oferta"
+                  />
                 </label>
               </div>
               <div className={styles.row2}>

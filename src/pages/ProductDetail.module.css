@@ -105,6 +105,16 @@
   font-family: var(--font-display);
 }
 
+.precioTachado {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.precioOferta {
+  color: var(--color-accent);
+}
+
 /* STOCK */
 .stockBadge {
   font-size: 13px;

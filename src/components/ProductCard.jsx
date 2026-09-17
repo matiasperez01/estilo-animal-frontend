@@ -14,6 +14,10 @@ export default function ProductCard({ product }) {
   const tieneVariantes = product.variantes?.length > 0
   const sinStock = product.stock === 0 && product.variantes?.every(v => v.stock === 0)
 
+  // El descuento es un precio único cargado en el producto, así que solo
+  // tiene sentido mostrarlo cuando no hay variantes (cada una con su propio precio).
+  const enOferta = !tieneVariantes && product.precioDescuento > 0 && product.precioDescuento < precioMinimo
+
   const imagen = product.imagenes?.length > 0
     ? product.imagenes[0].url
     : product.image
@@ -34,6 +38,7 @@ export default function ProductCard({ product }) {
         <span className={`${styles.badge} ${isGato ? styles.badgeCat : product.species === 'ambos' ? styles.badgeBoth : styles.badgeDog}`}>
           {product.badge}
         </span>
+        {enOferta && <span className={styles.badgeOferta}>Oferta</span>}
         {sinStock && (
           <div className={styles.sinStockOverlay}>Sin stock</div>
         )}
@@ -53,8 +58,17 @@ export default function ProductCard({ product }) {
 
         <div className={styles.footer}>
           <div className={styles.priceBlock}>
-            {tieneVariantes && <span className={styles.desde}>desde </span>}
-            <span className={styles.price}>{formatPrice(precioMinimo)}</span>
+            {enOferta ? (
+              <>
+                <span className={styles.priceTachado}>{formatPrice(precioMinimo)}</span>
+                <span className={`${styles.price} ${styles.priceOferta}`}>{formatPrice(product.precioDescuento)}</span>
+              </>
+            ) : (
+              <>
+                {tieneVariantes && <span className={styles.desde}>desde </span>}
+                <span className={styles.price}>{formatPrice(precioMinimo)}</span>
+              </>
+            )}
           </div>
           <button
             className={`${styles.addBtn} ${sinStock ? styles.addBtnDisabled : ''}`}

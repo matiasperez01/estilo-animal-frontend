@@ -39,6 +39,7 @@ function adaptarProducto(p) {
     species: p.especie?.toLowerCase() ?? 'perro',
     category: p.categoria?.nombre?.toLowerCase() ?? '',
     price: Number(p.precio) || 0,
+    precioDescuento: p.precioDescuento ? Number(p.precioDescuento) : null,
     sizes: [],
     image: p.imagenUrl ?? null,
     badge: p.especie === 'gato' ? 'Gato' : p.especie === 'ambos' ? 'Perros y Gatos' : 'Perro',

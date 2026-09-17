@@ -15,6 +15,17 @@
   color: var(--color-text-muted);
 }
 
+.precioTachado {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  font-size: 12px;
+}
+
+.precioOferta {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
 .searchBar {
   margin-bottom: 16px;
 }

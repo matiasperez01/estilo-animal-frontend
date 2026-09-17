@@ -51,13 +51,21 @@ useEffect(() => {
       return
     }
 
+    // El descuento es un precio único del producto: solo aplica sin variantes.
+    const enOferta = !selectedVariante && producto.precioDescuento > 0 && producto.precioDescuento < Number(producto.precio)
+    const precio = selectedVariante
+      ? Number(selectedVariante.precio)
+      : enOferta
+        ? Number(producto.precioDescuento)
+        : Number(producto.precio)
+
     dispatch({
       type: 'ADD_ITEM',
       payload: {
         product: {
           id: producto.id,
           name: producto.nombre,
-          price: selectedVariante ? Number(selectedVariante.precio) : Number(producto.precio),
+          price: precio,
           species: producto.especie,
           imagenUrl: producto.imagenUrl,
           tipoVariante: producto.tipoVariante,
@@ -107,9 +115,15 @@ useEffect(() => {
   }
   if (!producto) return <div className={styles.loading}>Producto no encontrado</div>
 
+  // El descuento es un precio único cargado en el producto: solo aplica
+  // cuando no hay variantes (cada una tiene su propio precio).
+  const enOferta = variantes.length === 0 && producto.precioDescuento > 0 && producto.precioDescuento < Number(producto.precio)
+
   const precioMostrado = selectedVariante
     ? Number(selectedVariante.precio)
-    : Number(producto.precio)
+    : enOferta
+      ? Number(producto.precioDescuento)
+      : Number(producto.precio)
 
   const stockMostrado = selectedVariante ? selectedVariante.stock : producto.stock
   const sinStock = stockMostrado === 0
@@ -169,10 +183,13 @@ useEffect(() => {
 
           {/* PRECIO */}
           <div className={styles.precioBlock}>
+            {enOferta && (
+              <span className={styles.precioTachado}>{formatPrice(Number(producto.precio))}</span>
+            )}
             {variantes.length > 0 && !selectedVariante && (
               <span className={styles.desde}>desde </span>
             )}
-            <span className={styles.precio}>{formatPrice(precioMostrado)}</span>
+            <span className={`${styles.precio} ${enOferta ? styles.precioOferta : ''}`}>{formatPrice(precioMostrado)}</span>
           </div>
 
           {/* STOCK */}
