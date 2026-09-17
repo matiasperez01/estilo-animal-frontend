@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
 import { formatPrice, varianteLabel } from '../store/products'
 import Toast from '../components/Toast'
@@ -16,6 +16,7 @@ const WA  = import.meta.env.VITE_WHATSAPP_NUMBER
 export default function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const { dispatch } = useCart()
   const { toast, showToast } = useToast()
 const [imagenActiva, setImagenActiva] = useState(0)
@@ -58,6 +59,16 @@ useEffect(() => {
     showToast(`${producto.nombre} agregado al carrito`)
   }
 
+  function volver() {
+    // Si se entró directo al producto (ej: desde un link compartido) no hay
+    // una página previa dentro de la app a la que volver con navigate(-1).
+    if (location.key === 'default') {
+      navigate('/tienda')
+    } else {
+      navigate(-1)
+    }
+  }
+
   function consultarWA() {
     const talle = selectedVariante ? ` - ${varianteLabel(producto.tipoVariante)} ${selectedVariante.talle}` : ''
     const precio = selectedVariante
@@ -96,7 +107,7 @@ useEffect(() => {
 
   return (
     <main className={styles.page}>
-      <button className={styles.back} onClick={() => navigate(-1)}>← Volver</button>
+      <button className={styles.back} onClick={volver}>← Volver</button>
 
       <div className={styles.layout}>
 
