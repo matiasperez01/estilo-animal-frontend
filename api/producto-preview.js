@@ -9,6 +9,8 @@
 const API_URL = process.env.VITE_API_URL || 'https://estilo-animal-backend-production.up.railway.app'
 const SITE_URL = 'https://www.estiloanimalrg.com'
 const IMAGEN_DEFAULT = `${SITE_URL}/og-image.jpg`
+const IMAGEN_DEFAULT_ANCHO = 1424
+const IMAGEN_DEFAULT_ALTO = 752
 
 function escapeHtml(texto) {
   return String(texto)
@@ -16,6 +18,22 @@ function escapeHtml(texto) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+}
+
+// Las fotos de producto vienen de Cloudinary con tamaños variables, y
+// Facebook exige declarar el ancho/alto exactos de la imagen (si no, la
+// marca como "aún no disponible" porque no puede inferirlos a tiempo). Se
+// fuerza un recorte fijo de 1200x630 vía transformación de Cloudinary para
+// poder declarar esas dimensiones con certeza.
+function imagenOg(url) {
+  if (url && url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    return {
+      url: url.replace('/upload/', '/upload/w_1200,h_630,c_fill,g_auto,f_jpg,q_auto/'),
+      ancho: 1200,
+      alto: 630,
+    }
+  }
+  return { url: IMAGEN_DEFAULT, ancho: IMAGEN_DEFAULT_ANCHO, alto: IMAGEN_DEFAULT_ALTO }
 }
 
 export default async function handler(req, res) {
@@ -31,7 +49,7 @@ export default async function handler(req, res) {
 
   const nombre = producto?.nombre || 'Estilo Animal RG'
   const descripcion = producto?.descripcion || 'Indumentaria y accesorios para mascotas. Comprá online desde Río Grande, Tierra del Fuego.'
-  const imagen = producto?.imagenUrl || IMAGEN_DEFAULT
+  const imagen = imagenOg(producto?.imagenUrl)
   const url = `${SITE_URL}/producto/${id}`
 
   // Si tiene variantes, el precio base suele ser un placeholder: el precio
@@ -52,7 +70,9 @@ export default async function handler(req, res) {
 
 <meta property="og:title" content="${escapeHtml(titulo)}" />
 <meta property="og:description" content="${escapeHtml(descripcion)}" />
-<meta property="og:image" content="${escapeHtml(imagen)}" />
+<meta property="og:image" content="${escapeHtml(imagen.url)}" />
+<meta property="og:image:width" content="${imagen.ancho}" />
+<meta property="og:image:height" content="${imagen.alto}" />
 <meta property="og:url" content="${escapeHtml(url)}" />
 <meta property="og:type" content="product" />
 <meta property="og:site_name" content="Estilo Animal RG" />
@@ -61,7 +81,7 @@ ${precio ? `<meta property="product:price:amount" content="${precio.replace(/\./
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${escapeHtml(titulo)}" />
 <meta name="twitter:description" content="${escapeHtml(descripcion)}" />
-<meta name="twitter:image" content="${escapeHtml(imagen)}" />
+<meta name="twitter:image" content="${escapeHtml(imagen.url)}" />
 </head>
 <body>
 <a href="${escapeHtml(url)}">${escapeHtml(nombre)}</a>
