@@ -16,6 +16,12 @@ const SUBCATEGORIAS = [
   { id: 'higiene', label: 'Higiene' },
 ]
 
+function estaSinStock(p) {
+  return p.variantes?.length > 0
+    ? p.variantes.every(v => v.stock === 0)
+    : p.stock === 0
+}
+
 function filtrarProductos(productos, especie, categoria) {
   let resultado = productos
   if (especie !== 'todos') {
@@ -85,9 +91,10 @@ export default function Catalog() {
   const adaptados = productos.map(adaptarProducto)
   const filteredPorCategoria = filtrarProductos(adaptados, activeFilter, activeCategory)
   const busqueda = search.trim().toLowerCase()
-  const filtered = busqueda
+  const filtradoBusqueda = busqueda
     ? filteredPorCategoria.filter(p => p.name.toLowerCase().includes(busqueda))
     : filteredPorCategoria
+  const filtered = [...filtradoBusqueda].sort((a, b) => estaSinStock(a) - estaSinStock(b))
 
   return (
     <main className={styles.page}>

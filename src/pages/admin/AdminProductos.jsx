@@ -33,6 +33,7 @@ export default function AdminProductos() {
   const [varianteForm, setVarianteForm] = useState({ talle: '', precio: '', stock: '' })
   const [imagenes, setImagenes] = useState([])
   const [tipoPersonalizado, setTipoPersonalizado] = useState(false)
+  const [busqueda, setBusqueda] = useState('')
 
   useEffect(() => {
     cargarDatos() 
@@ -208,11 +209,26 @@ async function eliminarVariante(varianteId) {
   setVariantes(prev => prev.filter(v => v.id !== varianteId))
 }
 
+  const productosFiltrados = busqueda.trim()
+    ? productos.filter(p => p.nombre.toLowerCase().includes(busqueda.trim().toLowerCase()))
+    : productos
+
   return (
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Productos</h1>
         <button className={styles.btnPrimary} onClick={abrirNuevo}>+ Nuevo producto</button>
+      </div>
+
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+          placeholder="Buscar productos..."
+          className={styles.searchInput}
+          aria-label="Buscar productos"
+        />
       </div>
 
       {loading ? (
@@ -231,7 +247,10 @@ async function eliminarVariante(varianteId) {
             </tr>
           </thead>
           <tbody>
-            {productos.map(p => (
+            {productosFiltrados.length === 0 && (
+              <tr><td colSpan={6} className={styles.estado}>No se encontraron productos.</td></tr>
+            )}
+            {productosFiltrados.map(p => (
               <tr key={p.id} className={p.stock <= (p.stockMinimo ?? 1) ? styles.rowAlert : ''}>
                 <td>{p.nombre}</td>
                 <td>{p.categoria?.nombre ?? '—'}</td>
