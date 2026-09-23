@@ -30,6 +30,85 @@
   margin-bottom: 16px;
 }
 
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.resumenTotal {
+  flex-shrink: 0;
+}
+
+.resumenTotalLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.resumenTotalValor {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
+
+.resumenTotalCantidad {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.resumenMeses {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding-left: 20px;
+  border-left: 1px solid var(--color-border);
+}
+
+.resumenMesRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.resumenMesLabel {
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.resumenMesValor {
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .resumen { flex-direction: column; }
+  .resumenMeses {
+    padding-left: 0;
+    border-left: none;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+  }
+}
+
 .searchInput {
   width: 100%;
   max-width: 320px;

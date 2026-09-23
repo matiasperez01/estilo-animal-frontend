@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { adminFetch } from '../../lib/adminAuth'
 import { formatPrice } from '../../store/products'
+import { resumenPorMes, totalGeneral } from './resumen'
 import ProductLineItems from './ProductLineItems'
 import styles from './AdminTable.module.css'
 import pStyles from './AdminPedidos.module.css'
@@ -137,12 +138,35 @@ export default function AdminProveedores() {
     cargarDatos()
   }
 
+  // Los cancelados no cuentan como costo real.
+  const pedidosValidos = pedidos.filter(p => p.estado !== 'CANCELADO')
+  const meses = resumenPorMes(pedidosValidos)
+  const costoTotal = totalGeneral(pedidosValidos)
+
   return (
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Pedidos a proveedores</h1>
         <button className={styles.btnPrimary} onClick={abrirNuevo}>+ Nuevo pedido</button>
       </div>
+
+      {!loading && pedidosValidos.length > 0 && (
+        <div className={styles.resumen}>
+          <div className={styles.resumenTotal}>
+            <p className={styles.resumenTotalLabel}>Costo total</p>
+            <p className={styles.resumenTotalValor}>{formatPrice(costoTotal)}</p>
+            <p className={styles.resumenTotalCantidad}>{pedidosValidos.length} pedido{pedidosValidos.length !== 1 ? 's' : ''}</p>
+          </div>
+          <div className={styles.resumenMeses}>
+            {meses.map(m => (
+              <div key={m.key} className={styles.resumenMesRow}>
+                <span className={styles.resumenMesLabel}>{m.label} ({m.cantidad})</span>
+                <span className={styles.resumenMesValor}>{formatPrice(m.total)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p className={styles.estado}>Cargando...</p>
