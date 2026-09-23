@@ -4,6 +4,80 @@
   padding: 32px 24px 64px;
 }
 
+/* BARRA FIJA DE COMPRA (mobile) */
+.stickyBar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 150;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 16px rgba(32, 24, 16, 0.1);
+  transform: translateY(100%);
+  transition: transform 0.25s ease;
+}
+
+.stickyBarVisible {
+  transform: translateY(0);
+}
+
+.stickyBarInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stickyBarImg {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.stickyBarNombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46vw;
+}
+
+.stickyBarPrecio {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.stickyBarBtn {
+  flex-shrink: 0;
+  padding: 11px 22px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+.stickyBarBtn:hover { opacity: 0.88; }
+.stickyBarBtn:disabled { background: var(--color-bg-tertiary); color: var(--color-text-muted); cursor: not-allowed; }
+
+@media (max-width: 768px) {
+  .stickyBar { display: flex; }
+  .page { padding-bottom: 84px; }
+}
+
 .loading {
   display: flex;
   align-items: center;

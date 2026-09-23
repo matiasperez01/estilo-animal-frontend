@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
 import { formatPrice, varianteLabel, adaptarProducto } from '../store/products'
 import { useProductos } from '../hooks/useProductos'
+import { flyToCart } from '../lib/flyToCart'
 import ProductCard from '../components/ProductCard'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
@@ -26,7 +27,10 @@ const [imagenActiva, setImagenActiva] = useState(0)
   const [variantes, setVariantes]             = useState([])
   const [selectedVariante, setSelectedVariante] = useState(null)
   const [loading, setLoading]                 = useState(true)
+  const [mostrarBarraFija, setMostrarBarraFija] = useState(false)
   const { productos: todosLosProductos } = useProductos()
+  const imgRef = useRef(null)
+  const ctasRef = useRef(null)
 
 useEffect(() => {
   async function cargar() {
@@ -46,7 +50,20 @@ useEffect(() => {
   cargar()
 }, [id])
 
-  function addToCart() {
+  // Muestra la barra fija de compra en mobile solo cuando el botón
+  // "Agregar al carrito" original ya no está a la vista.
+  useEffect(() => {
+    const el = ctasRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setMostrarBarraFija(!entry.isIntersecting),
+      { threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [producto])
+
+  function addToCart(origenEl) {
     const size = selectedVariante ? selectedVariante.talle : ''
     const yaEnCarrito = cartState.items.find(i => i.product.id === producto.id && i.size === size)
 
@@ -85,6 +102,7 @@ useEffect(() => {
         size,
       },
     })
+    flyToCart(origenEl ?? imgRef.current, producto.imagenUrl)
     showToast(producto.proximamente ? `${producto.nombre} reservado` : `${producto.nombre} agregado al carrito`)
   }
 
@@ -159,6 +177,7 @@ useEffect(() => {
     <>
       <div className={styles.imgMain}>
         <img
+          ref={imgRef}
           src={producto.imagenes[imagenActiva]?.url ?? producto.imagenUrl}
           alt={producto.nombre}
           className={styles.img}
@@ -179,7 +198,7 @@ useEffect(() => {
       )}
     </>
   ) : producto.imagenUrl ? (
-    <img src={producto.imagenUrl} alt={producto.nombre} className={styles.img} />
+    <img ref={imgRef} src={producto.imagenUrl} alt={producto.nombre} className={styles.img} />
   ) : (
     <div className={styles.imgPlaceholder}>
       {producto.especie === 'gato' ? <IconCat width={64} height={64} /> : <IconPaw width={56} height={56} />}
@@ -275,10 +294,10 @@ useEffect(() => {
           )}
 
           {/* CTAs */}
-          <div className={styles.ctas}>
+          <div className={styles.ctas} ref={ctasRef}>
             <button
               className={styles.addBtn}
-              onClick={addToCart}
+              onClick={e => addToCart(e.currentTarget)}
               disabled={sinStock || (variantes.length > 0 && !selectedVariante)}
             >
               <IconShoppingBag width={18} height={18} /> {proximamente ? 'Reservar' : 'Agregar al carrito'}
@@ -305,6 +324,24 @@ useEffect(() => {
           </div>
 
         </div>
+      </div>
+
+      {/* Barra fija de compra (solo mobile, cuando el CTA original no está a la vista) */}
+      <div className={`${styles.stickyBar} ${mostrarBarraFija ? styles.stickyBarVisible : ''}`}>
+        <div className={styles.stickyBarInfo}>
+          {producto.imagenUrl && <img src={producto.imagenUrl} alt="" className={styles.stickyBarImg} />}
+          <div>
+            <p className={styles.stickyBarNombre}>{producto.nombre}</p>
+            <p className={styles.stickyBarPrecio}>{formatPrice(precioMostrado)}</p>
+          </div>
+        </div>
+        <button
+          className={styles.stickyBarBtn}
+          onClick={e => addToCart(e.currentTarget)}
+          disabled={sinStock || (variantes.length > 0 && !selectedVariante)}
+        >
+          {proximamente ? 'Reservar' : 'Agregar'}
+        </button>
       </div>
 
       {relacionados.length > 0 && (

@@ -47,6 +47,7 @@ export default function Navbar() {
 
       <div className={styles.navRight}>
         <button
+          id="cart-icon-anchor"
           className={styles.cartBtn}
           onClick={() => dispatch({ type: 'OPEN_CART' })}
           aria-label="Abrir carrito"

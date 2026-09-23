@@ -123,3 +123,18 @@ h1, h2 {
 .heroTitle, .sectionTitle, .bannerTitle {
   font-family: var(--font-display);
 }
+
+/* Rebote del ícono del carrito al agregar un producto (ver flyToCart.js) */
+@keyframes cart-bounce {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.25); }
+  60% { transform: scale(0.92); }
+}
+
+.cart-bounce {
+  animation: cart-bounce 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-bounce { animation: none; }
+}

@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
-import { useProductosDestacados } from '../hooks/useProductos'
+import { useProductosDestacados, useProductos } from '../hooks/useProductos'
 import { adaptarProducto } from '../store/products'
 import ProductCard from '../components/ProductCard'
 import ProductCardSkeleton from '../components/ProductCardSkeleton'
+import HeroCarousel from '../components/HeroCarousel'
+import Reveal from '../components/Reveal'
 import Toast from '../components/Toast'
 import { useToast } from '../hooks/useToast'
 import {
@@ -34,39 +36,55 @@ const TESTIMONIOS = [
 
 const WA = import.meta.env.VITE_WHATSAPP_NUMBER
 
+const HERO_SLIDE_BASE = {
+  image: '/heroimagen.png',
+  alt: 'Estilo Animal',
+  eyebrow: null,
+  title: <>Indumentaria, accesorios<br />y juguetes para tu mascota</>,
+  sub: 'Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.',
+  ctaText: 'Ver productos',
+  ctaLink: '/tienda',
+}
+
+function especieLabel(species) {
+  if (species === 'gato') return 'Para gatos'
+  if (species === 'ambos') return 'Para perros y gatos'
+  return 'Para perros'
+}
+
 export default function Home() {
   const { toast, showToast } = useToast()
   const { productos: destacados, loading: loadingDestacados } = useProductosDestacados()
+  const { productos: todosLosProductos } = useProductos()
   const featuredAdaptados = destacados.map(adaptarProducto)
+
+  const heroSlides = [
+    HERO_SLIDE_BASE,
+    ...featuredAdaptados
+      .filter(p => p.image)
+      .slice(0, 2)
+      .map(p => ({
+        image: p.image,
+        alt: p.name,
+        eyebrow: especieLabel(p.species),
+        title: p.name,
+        sub: p.description || 'Descubrí este producto destacado en nuestra tienda.',
+        ctaText: 'Ver producto',
+        ctaLink: `/producto/${p.id}`,
+      })),
+  ]
+
+  const destacadosIds = new Set(featuredAdaptados.map(p => p.id))
+  const recienLlegados = [...todosLosProductos]
+    .filter(p => !destacadosIds.has(p.id))
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 8)
+    .map(adaptarProducto)
 
   return (
     <main>
 
-<section className={styles.hero}>
-  <div className={styles.heroVisual}>
-    <img src="/heroimagen.png" alt="Estilo Animal" className={styles.heroImg} />
-  </div>
-<div className={styles.heroContent}>
-  <h1 className={styles.heroTitle}>
-    Indumentaria, accesorios<br />y juguetes para tu mascota
-  </h1>
-  <p className={styles.heroSub}>
-    Todo lo que tu perro o gato necesita, sin salir de casa. Comprá online y recibilo en la puerta de tu hogar.
-  </p>
-  <div className={styles.heroCtas}>
-    <Link to="/tienda" className={styles.heroCta}>Ver productos</Link>
-    <a
-  href={`https://wa.me/${WA}?text=Hola! Quiero consultar sobre sus productos 🐾`}
-  target="_blank"
-  rel="noreferrer"
-  className={styles.heroCtaSecondary}
->
-  <IconWhatsApp style={{flexShrink:0}} />
-      Consultar por WhatsApp
-    </a>
-  </div>
-</div>
-</section>
+<HeroCarousel slides={heroSlides} />
 
 
 
@@ -87,7 +105,7 @@ export default function Home() {
 </div>
 
       {(loadingDestacados || featuredAdaptados.length > 0) && (
-        <section className={styles.featured}>
+        <Reveal as="section" className={styles.featured}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Productos destacados</h2>
             <Link to="/tienda" className={styles.seeAll}>Ver todos</Link>
@@ -103,10 +121,28 @@ export default function Home() {
                 />
               ))}
           </div>
-        </section>
+        </Reveal>
       )}
 
-<section className={styles.cats}>
+      {recienLlegados.length > 0 && (
+        <Reveal as="section" className={styles.featured}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Recién llegados</h2>
+            <Link to="/tienda" className={styles.seeAll}>Ver todos</Link>
+          </div>
+          <div className={styles.grid}>
+            {recienLlegados.map(product => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAdded={(name) => showToast(`${name} agregado al carrito`)}
+              />
+            ))}
+          </div>
+        </Reveal>
+      )}
+
+<Reveal as="section" className={styles.cats}>
   <h2 className={styles.sectionTitle}>¿Qué estás buscando?</h2>
   <div className={styles.catsGrid}>
     <Link to="/tienda?especie=perro" className={`${styles.catCard} ${styles.catCardDog}`}>
@@ -118,9 +154,9 @@ export default function Home() {
       <span>Gatos</span>
     </Link>
   </div>
-</section>
+</Reveal>
 
-      <section className={styles.sizeGuideSection}>
+      <Reveal as="section" className={styles.sizeGuideSection}>
         <div className={styles.sizeGuideContent}>
           <IconRuler className={styles.sizeGuideIcon} width={30} height={30} />
           <div>
@@ -129,9 +165,9 @@ export default function Home() {
           </div>
           <Link to="/guia-de-talles" className={styles.sizeGuideBtn}>Ver guía de talles</Link>
         </div>
-      </section>
+      </Reveal>
 
-      <section className={styles.testimonios}>
+      <Reveal as="section" className={styles.testimonios}>
         <h2 className={styles.sectionTitle}>Lo que dicen nuestros clientes</h2>
         <p className={styles.testimoniosSub}>Mascotas felices, dueños contentos</p>
         <div className={styles.testimoniosGrid}>
@@ -148,9 +184,9 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
-      <section className={styles.banner}>
+      <Reveal as="section" className={styles.banner}>
         <h2 className={styles.bannerTitle}>Compra desde tu casa, en Río Grande</h2>
         <p className={styles.bannerSub}>Envíos a domicilio y retiro en local. Aceptamos transferencia y efectivo.</p>
         <div className={styles.bannerCtas}>
@@ -165,7 +201,7 @@ export default function Home() {
              WhatsApp
           </a>
         </div>
-      </section>
+      </Reveal>
 
       <Toast message={toast} />
     </main>
