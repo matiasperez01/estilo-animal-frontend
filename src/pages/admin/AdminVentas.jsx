@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { adminFetch } from '../../lib/adminAuth'
 import { formatPrice } from '../../store/products'
-import { resumenPorMes, totalGeneral } from './resumen'
+import { agruparPorMes, totalGeneral } from './resumen'
 import ProductLineItems from './ProductLineItems'
 import styles from './AdminTable.module.css'
 import pStyles from './AdminPedidos.module.css'
@@ -34,6 +34,7 @@ export default function AdminVentas() {
   const [productos, setProductos] = useState([])
   const [loading, setLoading] = useState(true)
   const [expandido, setExpandido] = useState(null)
+  const [mesAbierto, setMesAbierto] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const [items, setItems] = useState([])
@@ -113,7 +114,7 @@ export default function AdminVentas() {
     cargarDatos()
   }
 
-  const meses = resumenPorMes(ventas)
+  const meses = agruparPorMes(ventas)
   const totalVendido = totalGeneral(ventas)
 
   return (
@@ -133,7 +134,7 @@ export default function AdminVentas() {
           <div className={styles.resumenMeses}>
             {meses.map(m => (
               <div key={m.key} className={styles.resumenMesRow}>
-                <span className={styles.resumenMesLabel}>{m.label} ({m.cantidad})</span>
+                <span className={styles.resumenMesLabel}>{m.label} ({m.items.length})</span>
                 <span className={styles.resumenMesValor}>{formatPrice(m.total)}</span>
               </div>
             ))}
@@ -146,44 +147,64 @@ export default function AdminVentas() {
       ) : ventas.length === 0 ? (
         <p className={styles.estado}>Todavía no cargaste ninguna venta manual.</p>
       ) : (
-        <div className={pStyles.list}>
-          {ventas.map(v => {
-            const isOpen = expandido === v.id
+        <div className={styles.mesesList}>
+          {meses.map(mes => {
+            const mesOpen = mesAbierto === mes.key
             return (
-              <div key={v.id} className={pStyles.card}>
-                <div className={pStyles.cardHeader} onClick={() => setExpandido(isOpen ? null : v.id)}>
-                  <div className={pStyles.cardLeft}>
-                    <span className={pStyles.pedidoId}>#{v.id}</span>
-                    <div>
-                      <p className={pStyles.clienteNombre}>{formatFecha(v.fecha)}</p>
-                      <p className={pStyles.clienteMeta}>
-                        {v.medioPago === 'transferencia' ? 'Transferencia' : 'Efectivo'}
-                        {v.costoEnvio > 0 ? ` · Envío ${formatPrice(v.costoEnvio)}` : ''}
-                      </p>
-                    </div>
-                  </div>
-                  <div className={pStyles.cardRight}>
-                    <span className={pStyles.total}>{formatPrice(v.total)}</span>
-                    <span className={pStyles.chevron}>{isOpen ? '▲' : '▼'}</span>
+              <div key={mes.key} className={styles.mesCard}>
+                <div className={styles.mesHeader} onClick={() => setMesAbierto(mesOpen ? null : mes.key)}>
+                  <span className={styles.mesLabel}>{mes.label}</span>
+                  <div className={styles.mesRight}>
+                    <span className={styles.mesCantidad}>{mes.items.length} venta{mes.items.length !== 1 ? 's' : ''}</span>
+                    <span className={styles.mesTotal}>{formatPrice(mes.total)}</span>
+                    <span className={pStyles.chevron}>{mesOpen ? '▲' : '▼'}</span>
                   </div>
                 </div>
 
-                {isOpen && (
-                  <div className={pStyles.cardBody}>
-                    <div>
-                      <p className={pStyles.detallesTitle}>Productos</p>
-                      {v.detalles?.map((d, i) => (
-                        <div key={i} className={pStyles.detalleRow}>
-                          <span>{d.nombreProducto ?? d.producto?.nombre}</span>
-                          {d.talle && <span className={pStyles.talle}>{d.talle}</span>}
-                          <span>x{d.cantidad}</span>
-                          <span>{formatPrice(d.subtotal)}</span>
+                {mesOpen && (
+                  <div className={pStyles.list} style={{ padding: '0 16px 16px' }}>
+                    {mes.items.map(v => {
+                      const isOpen = expandido === v.id
+                      return (
+                        <div key={v.id} className={pStyles.card}>
+                          <div className={pStyles.cardHeader} onClick={() => setExpandido(isOpen ? null : v.id)}>
+                            <div className={pStyles.cardLeft}>
+                              <span className={pStyles.pedidoId}>#{v.id}</span>
+                              <div>
+                                <p className={pStyles.clienteNombre}>{formatFecha(v.fecha)}</p>
+                                <p className={pStyles.clienteMeta}>
+                                  {v.medioPago === 'transferencia' ? 'Transferencia' : 'Efectivo'}
+                                  {v.costoEnvio > 0 ? ` · Envío ${formatPrice(v.costoEnvio)}` : ''}
+                                </p>
+                              </div>
+                            </div>
+                            <div className={pStyles.cardRight}>
+                              <span className={pStyles.total}>{formatPrice(v.total)}</span>
+                              <span className={pStyles.chevron}>{isOpen ? '▲' : '▼'}</span>
+                            </div>
+                          </div>
+
+                          {isOpen && (
+                            <div className={pStyles.cardBody}>
+                              <div>
+                                <p className={pStyles.detallesTitle}>Productos</p>
+                                {v.detalles?.map((d, i) => (
+                                  <div key={i} className={pStyles.detalleRow}>
+                                    <span>{d.nombreProducto ?? d.producto?.nombre}</span>
+                                    {d.talle && <span className={pStyles.talle}>{d.talle}</span>}
+                                    <span>x{d.cantidad}</span>
+                                    <span>{formatPrice(d.subtotal)}</span>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className={pStyles.actions}>
+                                <button className={styles.btnDelete} onClick={() => eliminar(v.id)}>Eliminar</button>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                    <div className={pStyles.actions}>
-                      <button className={styles.btnDelete} onClick={() => eliminar(v.id)}>Eliminar</button>
-                    </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
