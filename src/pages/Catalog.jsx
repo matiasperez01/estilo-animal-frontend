@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useProductos } from '../hooks/useProductos'
+import { useCategorias } from '../hooks/useCategorias'
 import { adaptarProducto, precioEfectivo } from '../store/products'
 import ProductCard from '../components/ProductCard'
 import ProductCardSkeleton from '../components/ProductCardSkeleton'
@@ -9,13 +10,7 @@ import { useToast } from '../hooks/useToast'
 import { IconPaw, IconCat, IconSearch, IconX } from '../components/icons/Icon'
 import styles from './Catalog.module.css'
 
-const SUBCATEGORIAS = [
-  { id: 'todos', label: 'Todos' },
-  { id: 'juguetes', label: 'Juguetes' },
-  { id: 'abrigos', label: 'Abrigos' },
-  { id: 'accesorios', label: 'Accesorios' },
-  { id: 'higiene', label: 'Higiene' },
-]
+const SUBCATEGORIA_TODOS = { id: 'todos', label: 'Todos' }
 
 function estaSinStock(p) {
   return p.variantes?.length > 0
@@ -48,7 +43,13 @@ export default function Catalog() {
   const [precioMin, setPrecioMin] = useState('')
   const [precioMax, setPrecioMax] = useState('')
   const { productos, loading, error } = useProductos()
+  const { categorias } = useCategorias()
   const { toast, showToast } = useToast()
+
+  const subcategorias = [
+    SUBCATEGORIA_TODOS,
+    ...categorias.map(c => ({ id: c.nombre.toLowerCase(), label: c.nombre })),
+  ]
 
   useEffect(() => {
     setActiveFilter(especieUrl)
@@ -148,7 +149,7 @@ export default function Catalog() {
 
       {activeFilter !== 'todos' && (
         <div className={styles.subfilters}>
-          {SUBCATEGORIAS.map(cat => (
+          {subcategorias.map(cat => (
             <button
               key={cat.id}
               className={`${styles.subfilterBtn} ${activeCategory === cat.id ? styles.subfilterBtnActive : ''}`}
