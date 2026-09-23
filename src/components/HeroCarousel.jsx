@@ -40,19 +40,20 @@ export default function HeroCarousel({ slides }) {
             className={`${styles.heroImg} ${styles.heroSlideImg} ${i === index ? styles.heroSlideActive : ''}`}
           />
         ))}
-        {slides.length > 1 && (
-          <div className={styles.heroDots}>
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                className={`${styles.heroDot} ${i === index ? styles.heroDotActive : ''}`}
-                onClick={() => setIndex(i)}
-                aria-label={`Ver slide ${i + 1} de ${slides.length}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
+
+      {slides.length > 1 && (
+        <div className={styles.heroDots}>
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              className={`${styles.heroDot} ${i === index ? styles.heroDotActive : ''}`}
+              onClick={() => setIndex(i)}
+              aria-label={`Ver slide ${i + 1} de ${slides.length}`}
+            />
+          ))}
+        </div>
+      )}
 
       <div className={styles.heroContent}>
         {actual.eyebrow && <p className={styles.heroEyebrow}>{actual.eyebrow}</p>}
