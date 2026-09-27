@@ -136,6 +136,14 @@ export default function ProductLineItems({
         <div className={styles.stagedRow}>
           <span className={styles.stagedNombre}>{staged.producto.nombre}</span>
 
+          <span className={styles.stagedStock}>
+            {staged.producto.variantes?.length > 0
+              ? staged.talle
+                ? `Stock: ${staged.producto.variantes.find(v => v.talle === staged.talle)?.stock ?? 0}`
+                : 'Elegí una opción para ver el stock'
+              : `Stock: ${staged.producto.stock ?? 0}`}
+          </span>
+
           {staged.producto.variantes?.length > 0 && (
             <select
               value={staged.talle}

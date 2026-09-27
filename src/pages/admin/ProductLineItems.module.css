@@ -78,6 +78,12 @@
   flex: 1 1 160px;
 }
 
+.stagedStock {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
 .stagedSelect,
 .stagedCantidad,
 .stagedPrecio {
