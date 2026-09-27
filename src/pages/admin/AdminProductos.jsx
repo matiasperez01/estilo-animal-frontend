@@ -315,8 +315,16 @@ async function eliminarVariante(varianteId) {
                   <input name="precio" type="number" value={form.precio} onChange={handleChange} required min="0" />
                 </label>
                 <label className={styles.field}>
-                  <span>Stock *</span>
-                  <input name="stock" type="number" value={form.stock} onChange={handleChange} required min="0" />
+                  <span>Stock * {variantes.length > 0 && <span className={styles.optional}>(suma de los talles)</span>}</span>
+                  <input
+                    name="stock"
+                    type="number"
+                    value={form.stock}
+                    onChange={handleChange}
+                    required
+                    min="0"
+                    disabled={variantes.length > 0}
+                  />
                 </label>
                 <label className={styles.field}>
                   <span>Stock mínimo</span>
