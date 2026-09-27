@@ -60,7 +60,13 @@ export function agruparPorMes(items, campoFecha = 'fecha', campoTotal = 'total')
   }
 
   for (const grupo of grupos.values()) {
-    grupo.items.sort((a, b) => new Date(b[campoFecha]) - new Date(a[campoFecha]))
+    // Muchas ventas/pedidos del mismo día quedan con la misma hora fija
+    // (se carga solo la fecha, sin hora), así que empatan al ordenar por
+    // fecha. Se desempata por id descendente: el más nuevo, primero.
+    grupo.items.sort((a, b) => {
+      const diff = new Date(b[campoFecha]) - new Date(a[campoFecha])
+      return diff !== 0 ? diff : (b.id ?? 0) - (a.id ?? 0)
+    })
   }
 
   return [...grupos.values()].sort((a, b) => b.key.localeCompare(a.key))
