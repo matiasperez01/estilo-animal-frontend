@@ -36,6 +36,15 @@ const TESTIMONIOS = [
 
 const WA = import.meta.env.VITE_WHATSAPP_NUMBER
 
+// Las fotos de Cloudinary vienen en su resolución original (pueden pesar
+// varios MB); para el hero alcanza con una versión más chica y comprimida,
+// así carga más rápido en datos móviles y no deja ver el fondo blanco de
+// la página mientras tarda.
+function optimizarImagenHero(url) {
+  if (!url || !url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url
+  return url.replace('/upload/', '/upload/w_900,q_auto,f_auto/')
+}
+
 const HERO_SLIDE_BASE = {
   image: '/heroimagen.png',
   alt: 'Estilo Animal',
@@ -64,7 +73,7 @@ export default function Home() {
   const heroSlides = [
     HERO_SLIDE_BASE,
     {
-      image: fotoPerro || '/heroimagen.png',
+      image: optimizarImagenHero(fotoPerro) || '/heroimagen.png',
       alt: 'Para perros',
       eyebrow: null,
       title: 'Para perros',
@@ -73,7 +82,7 @@ export default function Home() {
       ctaLink: '/tienda?especie=perro',
     },
     {
-      image: fotoGato || '/heroimagen.png',
+      image: optimizarImagenHero(fotoGato) || '/heroimagen.png',
       alt: 'Para gatos',
       eyebrow: null,
       title: 'Para gatos',
