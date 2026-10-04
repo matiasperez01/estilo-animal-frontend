@@ -46,32 +46,41 @@ const HERO_SLIDE_BASE = {
   ctaLink: '/tienda',
 }
 
-function especieLabel(species) {
-  if (species === 'gato') return 'Para gatos'
-  if (species === 'ambos') return 'Para perros y gatos'
-  return 'Para perros'
-}
-
 export default function Home() {
   const { toast, showToast } = useToast()
   const { productos: destacados, loading: loadingDestacados } = useProductosDestacados()
   const { productos: todosLosProductos } = useProductos()
   const featuredAdaptados = destacados.map(adaptarProducto)
 
+  // Fotos reales para los slides de "Para perros" / "Para gatos", tomadas
+  // del catálogo en vez de subir imágenes nuevas. Se prioriza una foto de
+  // un producto exclusivo de esa especie (un producto "ambos" puede estar
+  // fotografiado con la mascota equivocada para este slide puntual).
+  const fotoPerro = todosLosProductos.find(p => p.especie === 'perro' && p.imagenUrl)?.imagenUrl
+    ?? todosLosProductos.find(p => p.especie === 'ambos' && p.imagenUrl)?.imagenUrl
+  const fotoGato = todosLosProductos.find(p => p.especie === 'gato' && p.imagenUrl)?.imagenUrl
+    ?? todosLosProductos.find(p => p.especie === 'ambos' && p.imagenUrl)?.imagenUrl
+
   const heroSlides = [
     HERO_SLIDE_BASE,
-    ...featuredAdaptados
-      .filter(p => p.image)
-      .slice(0, 2)
-      .map(p => ({
-        image: p.image,
-        alt: p.name,
-        eyebrow: especieLabel(p.species),
-        title: p.name,
-        sub: p.description || 'Descubrí este producto destacado en nuestra tienda.',
-        ctaText: 'Ver producto',
-        ctaLink: `/producto/${p.id}`,
-      })),
+    {
+      image: fotoPerro || '/heroimagen.png',
+      alt: 'Para perros',
+      eyebrow: null,
+      title: 'Para perros',
+      sub: 'Ropa, accesorios y juguetes pensados para tu perro.',
+      ctaText: 'Ver productos',
+      ctaLink: '/tienda?especie=perro',
+    },
+    {
+      image: fotoGato || '/heroimagen.png',
+      alt: 'Para gatos',
+      eyebrow: null,
+      title: 'Para gatos',
+      sub: 'Todo lo que tu gato necesita, en un solo lugar.',
+      ctaText: 'Ver productos',
+      ctaLink: '/tienda?especie=gato',
+    },
   ]
 
   const destacadosIds = new Set(featuredAdaptados.map(p => p.id))
