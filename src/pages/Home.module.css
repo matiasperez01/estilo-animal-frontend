@@ -137,12 +137,12 @@
     position: relative;
     min-height: 420px;
     border-bottom: 1px solid var(--color-border);
-    overflow: hidden;
   }
 
   .heroVisual {
     position: absolute;
     inset: 0;
+    aspect-ratio: auto;
     border-radius: 0;
     border: none;
     z-index: 0;
@@ -541,12 +541,12 @@
     position: relative;
     min-height: 420px;
     border-bottom: 1px solid var(--color-border);
-    overflow: hidden;
   }
 
   .heroVisual {
     position: absolute;
     inset: 0;
+    aspect-ratio: auto;
     border-radius: 0;
     border: none;
     z-index: 0;
